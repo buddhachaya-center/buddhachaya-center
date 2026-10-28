@@ -1,0 +1,6 @@
+{
+  "name": "Buddhachaya Monastery",
+  "description": "Official website of Buddhachaya Buddhistisches Kloster & Meditationszentrum in Germany, guided by Venerable Sayadaw Ashin Kusalasami.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
