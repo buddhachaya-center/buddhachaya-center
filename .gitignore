@@ -1,6 +1,7 @@
 node_modules/
 build/
 dist/
+.next/
 coverage/
 .DS_Store
 *.log
@@ -10,3 +11,6 @@ coverage/
 .aistudio/
 
 .aistudio/
+
+*.tsbuildinfo
+next-env.d.ts

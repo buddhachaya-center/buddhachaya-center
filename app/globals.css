@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Noto Sans Myanmar", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", "Noto Serif Myanmar", serif;
+  --font-serif: "Lora", "Noto Serif Myanmar", Georgia, serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-myanmar: "Noto Serif Myanmar", serif;
+
+  --color-brand-offwhite: #FAF9F5;
+  --color-brand-slate: #333C3E;      /* Peaceful Slate Grey text */
+  --color-brand-beige: #F5F1E9;      /* Warm Beige surfaces */
+  --color-brand-primary: #1E3A5F;    /* Serene Metta Sapphire Blue (No Green) */
+  --color-brand-gold: #C0A47D;       /* Calm Pale Gold Accent */
+  --color-brand-gold-hover: #AF946E;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-brand-offwhite);
+    color: var(--color-brand-slate);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display) !important;
+  }
+}
+
+/* ==========================================================================
+   Editorial Aesthetic Visual Layout Resets
+   ========================================================================== */
+
+/* Flat square corners instead of round bubble shapes for editorial grid precision */
+.rounded-xl,
+.rounded-2xl,
+.rounded-lg,
+.rounded-md,
+.rounded-sm,
+.rounded {
+  border-radius: 0px !important;
+}
+
+/* Ensure round buttons / indicators remain rounded */
+.rounded-full {
+  border-radius: 9999px !important;
+}
+
+/* Hard, crisp editorial lines across all divider patterns */
+hr, .border-t, .border-b, .border-l, .border-r, .border {
+  border-width: 1px;
+}
+
+/* Match CSS classes corresponding to hardcoded Tailwind hexes to Peaceful Editorial colors */
+
+/* Backgrounds: Off-white Paper & Content Boards */
+.bg-\[\#FAF9F5\] {
+  background-color: #FAF9F5 !important;
+}
+.bg-\[\#FAF9F5\]\/90 {
+  background-color: rgba(250, 249, 245, 0.9) !important;
+}
+.bg-\[\#F4F1EA\] {
+  background-color: #FAF9F5 !important; /* Extremely clean, pure off-white background */
+}
+.bg-\[\#F4F1EA\]\/40 {
+  background-color: rgba(245, 241, 233, 0.4) !important; /* Soft warm beige mist */
+}
+.bg-\[\#F4F1EA\]\/65 {
+  background-color: rgba(245, 241, 233, 0.65) !important;
+}
+
+/* Borders: Platinum crisp gray hairline dividers */
+.border-\[\#E5E1D4\] {
+  border-color: #E5E4E2 !important;
+}
+.border-\[\#E5E1D4\]\/50 {
+  border-color: rgba(229, 228, 226, 0.5) !important;
+}
+.border-\[\#E5E1D4\]\/60 {
+  border-color: rgba(229, 228, 226, 0.6) !important;
+}
+
+/* Serene Monastic Metta Blue Accent (#1E3A5F) - Absolutely NO Green */
+.text-\[\#1E3F20\] {
+  color: #1E3A5F !important;
+}
+.text-\[\#1E3F20\]\/80 {
+  color: rgba(30, 58, 95, 0.8) !important;
+}
+.bg-\[\#1E3F20\] {
+  background-color: #1E3A5F !important;
+}
+.bg-\[\#1E3F20\]\/10 {
+  background-color: rgba(30, 58, 95, 0.1) !important;
+}
+.bg-\[\#1E3F20\]\/15 {
+  background-color: rgba(30, 58, 95, 0.15) !important;
+}
+.bg-\[\#1E3F20\]\/5 {
+  background-color: rgba(30, 58, 95, 0.05) !important;
+}
+.border-\[\#1E3F20\] {
+  border-color: #1E3A5F !important;
+}
+.border-\[\#1E3F20\]\/10 {
+  border-color: rgba(30, 58, 95, 0.1) !important;
+}
+.focus\:ring-\[\#1E3F20\]:focus {
+  --tw-ring-color: #1E3A5F !important;
+}
+
+/* Primary Dark Slate Grey text styling mapping (inducing absolute serenity) */
+.text-\[\#334155\] {
+  color: #333C3E !important;
+}
+.text-\[\#334155\]\/60 {
+  color: rgba(51, 60, 62, 0.6) !important;
+}
+.text-\[\#334155\]\/70 {
+  color: rgba(51, 60, 62, 0.7) !important;
+}
+.text-\[\#334155\]\/75 {
+  color: rgba(51, 60, 62, 0.75) !important;
+}
+.text-\[\#334155\]\/80 {
+  color: rgba(51, 60, 62, 0.8) !important;
+}
+.text-\[\#334155\]\/85 {
+  color: rgba(51, 60, 62, 0.85) !important;
+}
+.text-\[\#334155\]\/90 {
+  color: rgba(51, 60, 62, 0.9) !important;
+}
+.text-\[\#334155\]\/95 {
+  color: rgba(51, 60, 62, 0.95) !important;
+}
+
+/* Calm Nature Pale Gold accents tuning */
+.text-\[\#8A6D1C\] {
+  color: #C0A47D !important;
+}
+.bg-\[\#D4AF37\] {
+  background-color: #C0A47D !important;
+}
+.bg-\[\#D4AF37\]\/15 {
+  background-color: rgba(192, 164, 125, 0.15) !important;
+}
+.bg-\[\#D4AF37\]\/20 {
+  background-color: rgba(192, 164, 125, 0.2) !important;
+}
+.border-\[\#D4AF37\]\/45 {
+  border-color: rgba(192, 164, 125, 0.45) !important;
+}
+
+/* Specific styling for inputs to feel like crisp paper sheets */
+input, select, textarea {
+  border-radius: 0px !important;
+  border-color: #E5E4E2 !important;
+  background-color: #FAF9F5 !important;
+  color: #333C3E !important;
+}
+
+/* Custom scrollbar and animations */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-brand-offwhite);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-beige);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E5E4E2;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
