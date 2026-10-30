@@ -50,7 +50,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
       languageSelector: 'Select Language',
     },
     footer: {
-      quickLinksTitle: 'Navigation Loop',
+      quickLinksTitle: 'Quick Links',
       socialChannelsTitle: 'Social Channels',
       description: 'Buddhachaya Buddhist Center is a registered non-profit sanctuary in Germany devoted to systematic Vipassana meditation and Pali studies. All study materials are shared free of charge.',
       links: {
