@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import { type Locale } from '@/lib/i18n';
+import { uiStrings } from '@/content/ui';
+import Monastery from '@/components/Monastery';
 
 export async function generateMetadata({
   params,
@@ -7,7 +10,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: `Monastery - ${locale}`,
+    title: uiStrings[locale as Locale].header.nav.monastery,
   };
 }
 
@@ -18,11 +21,5 @@ export default async function MonasteryPage({
 }) {
   const { locale } = await params;
 
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-display font-bold text-[#333C3E]">
-        Monastery - {locale}
-      </h1>
-    </div>
-  );
+  return <Monastery locale={locale as Locale} />;
 }

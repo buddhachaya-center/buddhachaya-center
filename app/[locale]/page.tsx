@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import { type Locale } from '@/lib/i18n';
+import { uiStrings } from '@/content/ui';
+import Hero from '@/components/Hero';
+import Welcome from '@/components/Welcome';
 
 export async function generateMetadata({
   params,
@@ -8,7 +11,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   return {
-    title: `Home - ${locale}`,
+    title: uiStrings[locale as Locale].header.nav.home,
   };
 }
 
@@ -20,10 +23,9 @@ export default async function HomePage({
   const { locale } = await params;
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-display font-bold text-[#333C3E]">
-        Home - {locale}
-      </h1>
-    </div>
+    <>
+      <Hero locale={locale as Locale} />
+      <Welcome locale={locale as Locale} />
+    </>
   );
 }
