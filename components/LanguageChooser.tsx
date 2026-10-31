@@ -137,7 +137,7 @@ export default function LanguageChooser() {
                     <span className="font-bold text-xs sm:text-sm text-[#1A1A1A] tracking-wider truncate">
                       {opt.name}
                     </span>
-                    <span className="font-serif italic text-[11px] sm:text-xs text-[#666666] truncate">
+                    <span className="font-display italic text-[11px] sm:text-xs text-[#666666] truncate">
                       {opt.greeting}
                     </span>
                   </div>
