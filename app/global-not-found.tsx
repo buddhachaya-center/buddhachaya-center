@@ -1,6 +1,7 @@
 import './globals.css';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { fontVariables } from '@/lib/fonts';
 
 export const metadata: Metadata = {
   title: '404 - Page not found',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function GlobalNotFound() {
   return (
-    <html lang="en">
+    <html lang="en" className={fontVariables}>
       <body>
         <main className="min-h-screen flex items-center justify-center bg-[#FAF9F5] px-6">
           <div className="text-center">
