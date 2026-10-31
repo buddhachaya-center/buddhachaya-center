@@ -175,16 +175,7 @@ export default function Teachings({ locale }: TeachingsProps) {
                             <Play className="h-5 w-5 fill-current ml-0.5" />
                           </div>
                         </div>
-                        {/* Real YouTube thumbnail with fallback */}
-                        {/* TEMP sample image fallback, replace before launch */}
-                        <img
-                          src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
-                          alt={displayTitle}
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/src/assets/images/hero_buddha_chaya_1781268127495.jpg';
-                          }}
-                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                        />
+                        <div className="absolute inset-0 bg-[#1E3F20]" aria-hidden="true" />
                         <div className="absolute bottom-2 right-2 rounded bg-black/80 px-2 py-0.5 font-mono text-[10px] text-white z-20">
                           {video.duration}
                         </div>
