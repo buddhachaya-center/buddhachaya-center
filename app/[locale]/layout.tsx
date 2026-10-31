@@ -6,6 +6,8 @@ import LocaleSwitcher from '@/components/LocaleSwitcher';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { fontVariables } from '@/lib/fonts';
+import { SITE_URL, SITE_NAME } from '@/lib/seo';
+import { seoDescriptions, ogLocales } from '@/content/seo';
 
 export async function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -17,8 +19,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  if (!isLocale(locale)) return {};
   return {
-    title: 'Buddhachaya Center',
+    metadataBase: new URL(SITE_URL),
+    title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
+    description: seoDescriptions[locale],
+    openGraph: { siteName: SITE_NAME, type: 'website', locale: ogLocales[locale] },
   };
 }
 

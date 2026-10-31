@@ -3,6 +3,7 @@ import { type Locale } from '@/lib/i18n';
 import { uiStrings } from '@/content/ui';
 import Hero from '@/components/Hero';
 import Welcome from '@/components/Welcome';
+import { localeAlternates } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -12,6 +13,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: uiStrings[locale as Locale].header.nav.home,
+    alternates: localeAlternates(locale as Locale),
   };
 }
 
