@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { type Locale } from '@/lib/i18n';
 import { uiStrings } from '@/content/ui';
 import Courses from '@/components/Courses';
+import { localeAlternates } from '@/lib/seo';
 
 export async function generateMetadata({
   params,
@@ -11,6 +12,7 @@ export async function generateMetadata({
   const { locale } = await params;
   return {
     title: uiStrings[locale as Locale].header.nav.courses,
+    alternates: localeAlternates(locale as Locale, '/courses'),
   };
 }
 
