@@ -14,9 +14,9 @@ import type {
 
 // Image paths
 export const IMAGE_ASSETS = {
-  hero: '/src/assets/images/hero_buddha_chaya_1781268127495.jpg',
+  hero: '/images/hero-01.jpg',
   sayadaw: '/src/assets/images/buddhachaya_official_logo_1786274550066.jpg',
-  monastery: '/src/assets/images/monastery_grounds_1781268160420.jpg',
+  monastery: '/images/hero-02.jpg',
   logo: '/src/assets/images/buddhachaya_emblem_logo.jpg'
 };
 
