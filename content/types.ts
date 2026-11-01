@@ -120,3 +120,22 @@ export interface DonationData {
   copiedText: string;
   contactQuestion: string;
 }
+
+export interface DonationCampaign {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  whyTitle: string;
+  whyItems: string[];
+  planTitle: string;
+  planCards: Array<{ label: string; value: string; note?: string }>;
+  shareNote: string;
+  promiseTitle: string;
+  promiseItems: string[];
+  howTitle: string;
+  referenceNote: string;
+  closingTitle: string;
+  closing: string;
+  leaders: string;
+  sadhu: string;
+}

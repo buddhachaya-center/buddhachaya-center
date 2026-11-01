@@ -12,6 +12,6 @@ export const donationBankData: DonationBankData = {
   accountHolder: 'Dhammaduta Myanmar Buddhist Center Germany e.V.',
   iban: 'DE88500502010200860240',
   bic: 'HELADEF1822',
-  reference: 'Spende Buddhachaya',
+  reference: 'Kloster',
   contactEmail: 'info@buddhachaya.com'
 };
