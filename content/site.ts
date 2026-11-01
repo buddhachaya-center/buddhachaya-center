@@ -718,59 +718,53 @@ export const contactTranslations: Record<ContentLocale, ContactData> = {
   my: {
     title: 'ဆက်သွယ်ရန်',
     subtitle: 'သင်၏ မေးမြန်းစုံစမ်းမှုများကို ဗုဒ္ဓဆာယာ ဗုဒ္ဓအရိပ် သာသနာပြုကျောင်းအဖွဲ့မှ ကြိုဆိုလျက်ရှိပါသည်။',
-    formName: 'အမည်',
-    formEmail: 'အီးမေးလ်လိပ်စာ',
-    formMessage: 'မေးမြန်းလိုသည့်အကြောင်းအရာ',
-    formSubmit: 'ပေးပို့ရန်',
-    formSuccess: 'သင်၏ပေးပို့မှု အောင်မြင်ပါသည်။ ဆရာတော်နှင့် သာသနာပြုကျောင်းအဖွဲ့မှ မကြာမီ ပြန်လည်ဆက်သွယ်ပါမည်။ သတ္တဝါအားလုံး အေးချမ်းကြပါစေ။',
+    directTitle: 'တိုက်ရိုက်ဆက်သွယ်ရန်',
+    emailIntro: 'မေးမြန်းလိုသည်များ၊ တရားစခန်းနှင့် အခမ်းအနားဆိုင်ရာ စုံစမ်းလိုပါက အီးမေးလ်ဖြင့် ဆက်သွယ်နိုင်ပါသည်။',
     addressTitle: 'တည်နေရာ (ယာယီ)',
-    phoneTitle: 'ဆက်သွယ်ရန်ဖုန်းမံပါတ်',
+    phoneTitle: 'ဆက်သွယ်ရန်ဖုန်းနံပါတ်',
     emailTitle: 'အီးမေးလ်လိပ်စာ',
     committeeTitle: 'ဗုဒ္ဓဆာယာ ဗုဒ္ဓအရိပ် သာသနာပြုကျောင်းအဖွဲ့',
-    committeeMembers: [
-      { name: 'ဆရာတော် ဦးကုသလသာမိ', role: 'ဦးဆောင်ဆရာတော် / နာယက' },
-      { name: 'ဒေါ်အုန်းမော် (Evelyn)', role: 'ဂေါပကအဖွဲ့ အတွင်းရေးမှူး' },
-      { name: 'U Heinz Weber', role: 'နိုင်ငံတကာဆက်ဆံရေးနှင့် ဘဏ္ဍာရေးမှူး' },
-      { name: 'ဒေါ်ခင်လှတင့်', role: 'သာသနာရေးညှိနှိုင်းမှု တာဝန်ခံ' }
-    ]
+    committeeSubtitle: 'အမှုဆောင်များ',
+    committeeMembers: ['ဆရာတော် အရှင်ကုသလသာမိ', 'ဒေါ်ရွှေရွှေမော်', 'ဟောက်ခန့်ကျင်', 'ဦးစိုးလှထွန်း', 'ဦးသိန်းထွေး', 'ဦးဇင်မောင်မောင်စိုး', 'ဦးတင်မျိုးဝင်း'],
+    mapTitle: 'တည်နေရာ',
+    mapButton: 'Google Maps တွင် ဖွင့်ရန်',
+    osmButton: 'OpenStreetMap တွင် ဖွင့်ရန်',
+    copyText: 'ကူးယူရန်',
+    copiedText: 'ကူးယူပြီးပါပြီ'
   },
   en: {
     title: 'Contact Us',
     subtitle: 'The Buddhachaya Buddhist Missionary Group warmly welcomes your inquiries and suggestions.',
-    formName: 'Full Name',
-    formEmail: 'Email Address',
-    formMessage: 'Detailed Message / Inquiry',
-    formSubmit: 'Send Message',
-    formSuccess: 'Your message has been received with gratitude. We will reach out to you shortly. May you be peaceful.',
+    directTitle: 'Direct Contact',
+    emailIntro: 'For questions about retreats, ceremonies or the center, please write to us by email.',
     addressTitle: 'Location (Temporary)',
     phoneTitle: 'Mobile / Telephone',
     emailTitle: 'Email Address',
     committeeTitle: 'Buddhachaya Center Committee',
-    committeeMembers: [
-      { name: 'Venerable Sayadaw Ashin Kusalasami', role: 'Abt / Presiding Advisor' },
-      { name: 'Daw Ohn Maw (Evelyn)', role: 'General Secretary of Trustee board' },
-      { name: 'Mr. Heinz Weber', role: 'International Relations & Treasury' },
-      { name: 'Daw Khin Hla Tint', role: 'Monastic Welfare Coordinator' }
-    ]
+    committeeSubtitle: 'Committee Members',
+    committeeMembers: ['Sayadaw Ashin Kusalasami', 'Daw Shwe Shwe Maw', 'U Hauk Khant Kyin', 'U Soe Hla Htun', 'U Thein Htwe', 'U Zin Maung Maung Soe', 'U Tin Myo Win'],
+    mapTitle: 'Location',
+    mapButton: 'Open in Google Maps',
+    osmButton: 'Open in OpenStreetMap',
+    copyText: 'Copy',
+    copiedText: 'Copied'
   },
   de: {
     title: 'Kontaktieren Sie uns',
     subtitle: 'Die Buddhachaya Buddhistische Missionsgemeinschaft begrüßt Ihre Anfragen von ganzem Herzen.',
-    formName: 'Vollständiger Name',
-    formEmail: 'E-Mail-Adresse',
-    formMessage: 'Ihre Nachricht / Anfrage',
-    formSubmit: 'Nachricht senden',
-    formSuccess: 'Ihre Nachricht wurde mit Dankbarkeit empfangen. Wir werden uns in Kürze mit Ihnen in Verbindung setzen. Mögen Sie glücklich sein.',
+    directTitle: 'Direkter Kontakt',
+    emailIntro: 'Bei Fragen zu Retreats, Zeremonien oder zum Zentrum schreiben Sie uns gerne eine E-Mail.',
     addressTitle: 'Standort (Vorläufig)',
     phoneTitle: 'Telefonnummer',
     emailTitle: 'E-Mail-Adresse',
-    committeeTitle: 'Vorstand & Kuratorium Buddhachaya e.V.',
-    committeeMembers: [
-      { name: 'Ehrw. Sayadaw Ashin Kusalasami', role: 'Abt & Geistiger Berater' },
-      { name: 'Daw Ohn Maw (Evelyn)', role: 'Generalsekretärin' },
-      { name: 'Herr Heinz Weber', role: 'Schatzmeister & Europa-Koordinator' },
-      { name: 'Daw Khin Hla Tint', role: 'Organisationsleiterin' }
-    ]
+    committeeTitle: 'Komitee des Buddhachaya-Zentrums',
+    committeeSubtitle: 'Mitglieder',
+    committeeMembers: ['Sayadaw Ashin Kusalasami', 'Daw Shwe Shwe Maw', 'U Hauk Khant Kyin', 'U Soe Hla Htun', 'U Thein Htwe', 'U Zin Maung Maung Soe', 'U Tin Myo Win'],
+    mapTitle: 'Standort',
+    mapButton: 'In Google Maps öffnen',
+    osmButton: 'In OpenStreetMap öffnen',
+    copyText: 'Kopieren',
+    copiedText: 'Kopiert'
   }
 };
 

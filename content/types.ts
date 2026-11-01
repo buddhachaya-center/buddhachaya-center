@@ -92,16 +92,19 @@ export interface ScheduledEvent {
 export interface ContactData {
   title: string;
   subtitle: string;
-  formName: string;
-  formEmail: string;
-  formMessage: string;
-  formSubmit: string;
-  formSuccess: string;
+  directTitle: string;
+  emailIntro: string;
   addressTitle: string;
   phoneTitle: string;
   emailTitle: string;
   committeeTitle: string;
-  committeeMembers: Array<{ name: string; role: string }>;
+  committeeSubtitle: string;
+  committeeMembers: string[];
+  mapTitle: string;
+  mapButton: string;
+  osmButton: string;
+  copyText: string;
+  copiedText: string;
 }
 
 export interface DonationData {
