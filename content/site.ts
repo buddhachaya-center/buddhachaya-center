@@ -8,7 +8,6 @@ import type {
   MonasteryDetail,
   ScheduledEvent,
   ContactData,
-  DonationOption,
   DonationData
 } from './types';
 
@@ -788,7 +787,14 @@ export const donationTranslations: Record<ContentLocale, DonationData> = {
     ],
     gratitudeMessage: 'ဒါယကာ ဒါယိကာမများ၏ ဆည်းပူးအပ်သော ဒါနကောင်းမှုသည် ဘဝတစ်လျှောက်လုံး အေးမြငြိမ်းချမ်းသော သာသနာရိပ်ဖြစ်စေကာ ဘေးဘယာဝေးကွာပြီး ကုသိုလ်ထူးရရှိစေပါစေကြောင်း ဆုတောင်းမေတ္တာပို့သအပ်ပါသည်။',
     danaTitle: 'စေတနာအလျောက် လှူဒါန်းဖိတ်ခေါ်ခြင်း',
-    ctaText: 'အလှူတော် ဒါနပြုလုပ်မည်'
+    ctaText: 'အလှူတော် ဒါနပြုလုပ်မည်',
+    accountHolderLabel: 'အကောင့်ပိုင်ရှင်',
+    ibanLabel: 'IBAN',
+    bicLabel: 'BIC (SWIFT Code)',
+    referenceLabel: 'ရည်ရွယ်ချက် (Verwendungszweck)',
+    copyText: 'ကူးယူရန်',
+    copiedText: 'ကူးယူပြီးပါပြီ',
+    contactQuestion: 'လှူဒါန်းမှုအကြောင်း မေးမြန်းလိုပါက'
   },
   en: {
     title: 'Dana & Donations',
@@ -802,7 +808,14 @@ export const donationTranslations: Record<ContentLocale, DonationData> = {
     ],
     gratitudeMessage: 'May your noble acts of generosity bring you deep inner calm, continuous prosperity, and direct progress along the Path. We pray for your eternal peace.',
     danaTitle: 'Sow Seeds of Generosity',
-    ctaText: 'Dana — Make a Donation'
+    ctaText: 'Dana — Make a Donation',
+    accountHolderLabel: 'Account Holder',
+    ibanLabel: 'IBAN',
+    bicLabel: 'BIC (SWIFT Code)',
+    referenceLabel: 'Reference (Verwendungszweck)',
+    copyText: 'Copy',
+    copiedText: 'Copied',
+    contactQuestion: 'Questions about donations'
   },
   de: {
     title: 'Dāna & Spenden',
@@ -816,45 +829,15 @@ export const donationTranslations: Record<ContentLocale, DonationData> = {
     ],
     gratitudeMessage: 'Möge Ihre noble Großzügigkeit Ihnen tiefen inneren Frieden, Wohlstand und direkten Fortschritt auf dem Pfad des Erwachens bringen.',
     danaTitle: 'Heilsames dāna praktizieren',
-    ctaText: 'Dāna — Spende tätigen'
+    ctaText: 'Dāna — Spende tätigen',
+    accountHolderLabel: 'Kontoinhaber',
+    ibanLabel: 'IBAN',
+    bicLabel: 'BIC (SWIFT-Code)',
+    referenceLabel: 'Verwendungszweck',
+    copyText: 'Kopieren',
+    copiedText: 'Kopiert',
+    contactQuestion: 'Fragen zu Spenden'
   }
 };
 
-// TEMP: Bank details below are placeholders until the committee confirms (D5)
-export const donationOptions: DonationOption[] = [
-  {
-    id: 'pay-sepa',
-    tabLabel: '🏦 SEPA Bank Transfer',
-    title: 'Deductive Bank Transfer (Europe IBAN)',
-    instructions: 'Direct SEPA Bank wire transfers are fully free from system charges and the most efficient way to support the monastery in Germany.',
-    details: {
-      'Account Holder (Spendenempfänger)': 'Buddhachaya Meditationszentrum e.V.',
-      'Bank Name (Kreditinstitut)': 'Sparkasse KölnBonn',
-      'IBAN': 'DE45 3705 0198 0012 3456 78',
-      'BIC / SWIFT': 'COLO DE 33 XXX',
-      'Purpose of Payment (Verwendungszweck)': 'Dhamma Dana / Spende'
-    }
-  },
-  {
-    id: 'pay-paypal',
-    tabLabel: '💳 PayPal',
-    title: 'Instant Online Contribution (PayPal)',
-    instructions: 'Make secure, instant donations with your PayPal account or via linked bank accounts globally.',
-    details: {
-      'PayPal Recipient Email': 'donations@buddhachaya-center.org',
-      'Reference Code': 'Dana Buddhachaya Center',
-      'Alternative Link / QR': 'paypal.me/buddhachaya'
-    }
-  },
-  {
-    id: 'pay-myanmar',
-    tabLabel: '📱 Myanmar Mobile Banking',
-    title: 'Myanmar Diaspora Direct Transfer',
-    instructions: 'Specifically created to facilitate easy merit offerings (Ahlu Dana) from the domestic Myanmar population and family structures.',
-    details: {
-      'KBZPay Wallet': '0915214489565 (Daw Ohn Maw - Sec. Buddhachaya)',
-      'WavePay Wallet': '0915214489565 (Trusteecouncil)',
-      'Reference text': 'ဂျာမနီ ဗုဒ္ဓဆာယာ ကျောင်းအလှူ'
-    }
-  }
-];
+
