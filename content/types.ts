@@ -104,14 +104,6 @@ export interface ContactData {
   committeeMembers: Array<{ name: string; role: string }>;
 }
 
-export interface DonationOption {
-  id: string;
-  tabLabel: string;
-  title: string;
-  instructions: string;
-  details: Record<string, string>;
-}
-
 export interface DonationData {
   title: string;
   subtitle: string;
@@ -120,4 +112,11 @@ export interface DonationData {
   gratitudeMessage: string;
   danaTitle: string;
   ctaText: string;
+  accountHolderLabel: string;
+  ibanLabel: string;
+  bicLabel: string;
+  referenceLabel: string;
+  copyText: string;
+  copiedText: string;
+  contactQuestion: string;
 }
