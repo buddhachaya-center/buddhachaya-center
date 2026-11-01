@@ -184,3 +184,29 @@ input, select, textarea {
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
 }
+
+/* ==========================================================================
+   Hover states
+   The !important color remaps above also match the element while it is
+   hovered, and they beat the plain hover: utilities (which have no
+   !important). Result: dark text on a dark hover background. These rules
+   restore the hover colors; :hover adds specificity so they win.
+   ========================================================================== */
+.hover\:bg-\[\#1E3F20\]:hover {
+  background-color: #1E3A5F !important;
+}
+.hover\:text-\[\#FAF9F5\]:hover {
+  color: #FAF9F5 !important;
+}
+.hover\:text-\[\#1E3F20\]:hover {
+  color: #1E3A5F !important;
+}
+.hover\:bg-emerald-800:hover {
+  background-color: #162E4D !important;
+}
+.hover\:bg-\[\#C19A2E\]:hover {
+  background-color: #AF946E !important;
+}
+.hover\:bg-\[\#E5E1D4\]:hover {
+  background-color: #E5E4E2 !important;
+}
