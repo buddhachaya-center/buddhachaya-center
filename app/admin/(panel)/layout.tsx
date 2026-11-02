@@ -47,7 +47,10 @@ export default async function AdminPanelLayout({
   return (
     <div className="min-h-screen bg-[#FAF9F5]">
       <div className="bg-[#1E3F20] text-white px-6 py-4 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Admin</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-lg font-semibold">Admin</h1>
+          <a href="/admin/posts" className="text-sm hover:underline focus:outline-none">Posts</a>
+        </div>
         <div className="flex items-center gap-4">
           <span className="text-sm">{staffUser.display_name || ''}</span>
           <span className="text-sm bg-white/20 px-2 py-1 rounded">{roleLabel}</span>
