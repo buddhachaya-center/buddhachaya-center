@@ -3,6 +3,9 @@ import { type Locale } from '@/lib/i18n';
 import { uiStrings } from '@/content/ui';
 import Teachings from '@/components/Teachings';
 import { localeAlternates } from '@/lib/seo';
+import { getPublishedPosts, postToArticle } from '@/lib/posts';
+import { contentSuffix } from '@/lib/i18n';
+import type { DhammaArticle } from '@/content/types';
 
 export async function generateMetadata({
   params,
@@ -16,6 +19,8 @@ export async function generateMetadata({
   };
 }
 
+export const revalidate = 300;
+
 export default async function TeachingsPage({
   params,
 }: {
@@ -23,5 +28,15 @@ export default async function TeachingsPage({
 }) {
   const { locale } = await params;
 
-  return <Teachings locale={locale as Locale} />;
+  const posts = await getPublishedPosts(20, 'teaching');
+  let dbArticles: DhammaArticle[] | null = null;
+
+  if (posts && posts.length > 0) {
+    const mapped = posts
+      .map(post => postToArticle(post, contentSuffix[locale as Locale]))
+      .filter((article): article is DhammaArticle => article !== null);
+    dbArticles = mapped.length > 0 ? mapped : null;
+  }
+
+  return <Teachings locale={locale as Locale} dbArticles={dbArticles} />;
 }

@@ -10,22 +10,31 @@ import { Play, BookOpen, Clock, Globe, ArrowRight, X, Video, ExternalLink } from
 
 interface TeachingsProps {
   locale: Locale;
+  dbArticles?: DhammaArticle[] | null;
 }
 
-export default function Teachings({ locale }: TeachingsProps) {
+export default function Teachings({ locale, dbArticles }: TeachingsProps) {
   const contentLocale = contentSuffix[locale];
   const [selectedArticle, setSelectedArticle] = useState<DhammaArticle | null>(null);
   const [activeVideo, setActiveVideo] = useState<DhammaVideo | null>(null);
 
-  // Filter articles based on language (or show matching language, or matching fallback)
-  const filteredArticles = dhammaArticles.filter(art => {
-    // If article translation matches active language or matches 'all'
-    return art.language === contentLocale;
-  });
+  let displayArticles: DhammaArticle[];
+  let showFallbackNotice: boolean;
 
-  // Fallback: if no articles for current language, show English articles with notice
-  const displayArticles = filteredArticles.length > 0 ? filteredArticles : dhammaArticles.filter(a => a.language === 'en');
-  const showFallbackNotice = filteredArticles.length === 0;
+  if (dbArticles && dbArticles.length > 0) {
+    displayArticles = dbArticles;
+    showFallbackNotice = dbArticles.some(a => a.language !== contentLocale);
+  } else {
+    // Filter articles based on language (or show matching language, or matching fallback)
+    const filteredArticles = dhammaArticles.filter(art => {
+      // If article translation matches active language or matches 'all'
+      return art.language === contentLocale;
+    });
+
+    // Fallback: if no articles for current language, show English articles with notice
+    displayArticles = filteredArticles.length > 0 ? filteredArticles : dhammaArticles.filter(a => a.language === 'en');
+    showFallbackNotice = filteredArticles.length === 0;
+  }
 
   return (
     <motion.div
