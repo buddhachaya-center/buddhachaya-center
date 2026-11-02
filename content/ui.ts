@@ -66,7 +66,7 @@ export const uiStrings: Record<Locale, UIStrings> = {
   de: {
     header: {
       brandName: 'Buddhachaya Kloster & Meditationszentrum',
-      location: 'Germany',
+      location: 'Deutschland',
       nav: {
         home: 'Home',
         biography: 'Biografie',
@@ -81,8 +81,8 @@ export const uiStrings: Record<Locale, UIStrings> = {
       languageSelector: 'Sprache wählen',
     },
     footer: {
-      quickLinksTitle: '',
-      socialChannelsTitle: '',
+      quickLinksTitle: 'Schnellzugriff',
+      socialChannelsTitle: 'Soziale Kanäle',
       description: 'Das Buddhachaya-Kloster ist ein eingetragener gemeinnütziger Verein in Deutschland, der dem Studium des Pali-Kanons und der Meditation dient. Alle Vorträge sind kostenfrei.',
       links: {
         biography: 'Sayadaw',
