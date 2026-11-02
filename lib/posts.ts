@@ -17,6 +17,13 @@ export type PostListItem = {
   cover_image_url: string | null;
 };
 
+export type PostFull = PostListItem & {
+  content_my: string | null;
+  content_en: string | null;
+  content_de: string | null;
+  author: string;
+};
+
 export async function getPublishedPosts(limit = 20, postType?: string): Promise<PostListItem[] | null> {
   const supabase = getSupabase();
 
@@ -61,5 +68,34 @@ export function postToArticle(post: PostListItem, locale: ContentLocale): Dhamma
     author: 'Sayadaw Ashin Kusalasami',
     date: post.published_at ? post.published_at.slice(0, 10) : '',
     language: title.lang,
+    slug: post.slug,
   };
+}
+
+export async function getPostBySlug(slug: string, postType?: string): Promise<PostFull | null> {
+  const supabase = getSupabase();
+
+  if (!supabase) {
+    return null;
+  }
+
+  let query = supabase
+    .from('posts')
+    .select(
+      'id, slug, post_type, category, published_at, title_my, title_en, title_de, excerpt_my, excerpt_en, excerpt_de, content_my, content_en, content_de, author, cover_image_url'
+    )
+    .eq('slug', slug)
+    .eq('status', 'published');
+
+  if (postType) {
+    query = query.eq('post_type', postType);
+  }
+
+  const { data, error } = await query.maybeSingle();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return data;
 }
