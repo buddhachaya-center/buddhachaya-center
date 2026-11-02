@@ -115,7 +115,7 @@ export default function Footer({ locale }: FooterProps) {
         {/* Lower footer copyright details */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-[#FAF9F5]/60 font-mono gap-4">
           <div className="flex items-center space-x-1">
-            <span>© {new Date().getFullYear()} Buddhachaya Kloster e.V. All rights preserved.</span>
+            <span>© {new Date().getFullYear()} Buddhachaya Kloster e.V. All rights reserved.</span>
           </div>
 
           <div className="flex items-center">
