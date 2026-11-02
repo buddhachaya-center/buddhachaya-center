@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import type { DhammaArticle, DhammaVideo } from '@/content/types';
 import { Locale } from '@/lib/i18n';
 import { contentSuffix } from '@/lib/i18n';
@@ -11,6 +12,53 @@ import { Play, BookOpen, Clock, Globe, ArrowRight, X, Video, ExternalLink } from
 interface TeachingsProps {
   locale: Locale;
   dbArticles?: DhammaArticle[] | null;
+}
+
+function ArticleCard({
+  art,
+  locale,
+  onClick,
+}: {
+  art: DhammaArticle;
+  locale: Locale;
+  onClick?: () => void;
+}) {
+  const contentLocale = contentSuffix[locale];
+
+  return (
+    <div
+      className="bg-[#F4F1EA] rounded-xl border border-[#E5E1D4] p-6 hover:shadow-md transition-shadow cursor-pointer"
+      onClick={onClick}
+      id={`article-${art.id}`}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#1E3F20] uppercase">
+          {art.author}
+        </span>
+        <span className="rounded bg-[#1E3F20]/10 text-[#1E3F20] text-[9px] font-extrabold tracking-widest px-2 py-0.5 uppercase">
+          {art.language.toUpperCase()}
+        </span>
+      </div>
+
+      <h4 className="font-display font-extrabold text-lg sm:text-xl text-slate-800 hover:text-[#1E3F20] transition-colors leading-snug">
+        {art.title}
+      </h4>
+
+      <p className="text-sm text-[#334155]/85 mt-2.5 leading-relaxed line-clamp-2">
+        {art.excerpt}
+      </p>
+
+      <div className="flex items-center justify-between mt-5 pt-3 border-t border-[#E5E1D4]/50">
+        <span className="text-[11px] font-mono text-[#334155]/60">
+          Published: {art.date}
+        </span>
+        <span className="flex items-center text-xs font-bold text-[#1E3F20] hover:underline">
+          <span>{contentLocale === 'my' ? 'အပြည့်အစုံဖတ်ရန်' : contentLocale === 'de' ? 'Weiterlesen' : 'Read Paper'}</span>
+          <ArrowRight className="h-3 ml-1.5" />
+        </span>
+      </div>
+    </div>
+  );
 }
 
 export default function Teachings({ locale, dbArticles }: TeachingsProps) {
@@ -79,41 +127,24 @@ export default function Teachings({ locale, dbArticles }: TeachingsProps) {
             </h3>
 
             <div className="space-y-4">
-              {displayArticles.map((art) => (
-                <div
-                  key={art.id}
-                  className="bg-[#F4F1EA] rounded-xl border border-[#E5E1D4] p-6 hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => setSelectedArticle(art)}
-                  id={`article-${art.id}`}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#1E3F20] uppercase">
-                      {art.author}
-                    </span>
-                    <span className="rounded bg-[#1E3F20]/10 text-[#1E3F20] text-[9px] font-extrabold tracking-widest px-2 py-0.5 uppercase">
-                      {art.language.toUpperCase()}
-                    </span>
-                  </div>
-                  
-                  <h4 className="font-display font-extrabold text-lg sm:text-xl text-slate-800 hover:text-[#1E3F20] transition-colors leading-snug">
-                    {art.title}
-                  </h4>
-                  
-                  <p className="text-sm text-[#334155]/85 mt-2.5 leading-relaxed line-clamp-2">
-                    {art.excerpt}
-                  </p>
-                  
-                  <div className="flex items-center justify-between mt-5 pt-3 border-t border-[#E5E1D4]/50">
-                    <span className="text-[11px] font-mono text-[#334155]/60">
-                      Published: {art.date}
-                    </span>
-                    <span className="flex items-center text-xs font-bold text-[#1E3F20] hover:underline">
-                      <span>{contentLocale === 'my' ? 'အပြည့်အစုံဖတ်ရန်' : contentLocale === 'de' ? 'Weiterlesen' : 'Read Paper'}</span>
-                      <ArrowRight className="h-3 ml-1.5" />
-                    </span>
-                  </div>
-                </div>
-              ))}
+              {displayArticles.map((art) =>
+                art.slug ? (
+                  <Link
+                    key={art.id}
+                    href={`/${locale}/teachings/${art.slug}`}
+                    className="block"
+                  >
+                    <ArticleCard art={art} locale={locale} />
+                  </Link>
+                ) : (
+                  <ArticleCard
+                    key={art.id}
+                    art={art}
+                    locale={locale}
+                    onClick={() => setSelectedArticle(art)}
+                  />
+                )
+              )}
             </div>
           </div>
 
