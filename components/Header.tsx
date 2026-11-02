@@ -93,7 +93,7 @@ export default function Header({ locale }: HeaderProps) {
           {/* Quick Donate CTA */}
           <Link
             href={`/${locale}/donations`}
-            className="flex items-center space-x-1 px-3 py-1.5 text-xs font-semibold rounded bg-[#D4AF37] hover:bg-[#C19A2E] text-white shadow-sm"
+            className="flex items-center space-x-1 px-3 py-1.5 text-xs font-semibold rounded bg-[#D4AF37] hover:bg-[#C19A2E] text-[#1E3A5F] shadow-sm"
           >
             <HeartHandshake className="h-3.5 w-3.5" />
             <span>{strings.header.mobileDonate}</span>
