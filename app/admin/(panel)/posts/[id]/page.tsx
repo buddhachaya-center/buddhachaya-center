@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import PostForm from '../PostForm'
+import PostActions from '../PostActions'
 
 type PostRow = {
   id: string
@@ -108,6 +109,8 @@ export default async function EditPostPage({
         isPublished={post.status === 'published'}
         initial={initial}
       />
+
+      {role === 'admin' && <PostActions id={post.id} isPublished={post.status === 'published'} />}
     </div>
   )
 }
