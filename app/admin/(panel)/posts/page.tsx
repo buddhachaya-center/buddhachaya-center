@@ -18,7 +18,7 @@ type PostRow = {
 export default async function PostsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>
+  searchParams: Promise<{ status?: string; type?: string; saved?: string }>
 }) {
   const params = await searchParams
   const supabase = await createClient()
@@ -31,6 +31,10 @@ export default async function PostsPage({
 
   if (params.status === 'draft' || params.status === 'review' || params.status === 'published') {
     query = query.eq('status', params.status)
+  }
+
+  if (params.type === 'teaching' || params.type === 'blog') {
+    query = query.eq('post_type', params.type)
   }
 
   const { data: posts, error } = await query
@@ -46,22 +50,46 @@ export default async function PostsPage({
     return <p className="text-[#1E3F20]">Could not load posts.</p>
   }
 
-  const allUrl = '/admin/posts'
-  const draftUrl = '/admin/posts?status=draft'
-  const reviewUrl = '/admin/posts?status=review'
-  const publishedUrl = '/admin/posts?status=published'
+  const buildFilterUrl = (status?: string, type?: string) => {
+    const sp = new URLSearchParams()
+    if (status) sp.set('status', status)
+    if (type) sp.set('type', type)
+    const qs = sp.toString()
+    return qs ? `/admin/posts?${qs}` : '/admin/posts'
+  }
 
   const activeClass = 'font-semibold underline'
+
+  const currentType = params.type === 'teaching' || params.type === 'blog' ? params.type : undefined
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#1E3F20] mb-4">Posts</h1>
-      
+
+      {params.saved === '1' && (
+        <p className="text-green-700 text-sm mb-4">Saved.</p>
+      )}
+
       <div className="flex gap-4 mb-6 text-sm text-[#1E3F20]">
-        <a href={allUrl} className={!params.status ? activeClass : ''}>All</a>
-        <a href={draftUrl} className={params.status === 'draft' ? activeClass : ''}>Draft</a>
-        <a href={reviewUrl} className={params.status === 'review' ? activeClass : ''}>Review</a>
-        <a href={publishedUrl} className={params.status === 'published' ? activeClass : ''}>Published</a>
+        <a href={buildFilterUrl(params.status)} className={!currentType ? activeClass : ''}>All types</a>
+        <a href={buildFilterUrl(params.status, 'teaching')} className={currentType === 'teaching' ? activeClass : ''}>Teaching</a>
+        <a href={buildFilterUrl(params.status, 'blog')} className={currentType === 'blog' ? activeClass : ''}>Blog</a>
+      </div>
+
+      <div className="flex gap-4 mb-6 text-sm text-[#1E3F20]">
+        <a href={buildFilterUrl(undefined, currentType)} className={!params.status ? activeClass : ''}>All</a>
+        <a href={buildFilterUrl('draft', currentType)} className={params.status === 'draft' ? activeClass : ''}>Draft</a>
+        <a href={buildFilterUrl('review', currentType)} className={params.status === 'review' ? activeClass : ''}>Review</a>
+        <a href={buildFilterUrl('published', currentType)} className={params.status === 'published' ? activeClass : ''}>Published</a>
+      </div>
+
+      <div className="mb-6">
+        <a
+          href={`/admin/posts/new?type=${currentType || 'teaching'}`}
+          className="bg-[#1E3F20] text-white py-2 px-4 rounded hover:bg-[#163318] focus:outline-none focus:ring-2 focus:ring-[#1E3F20] focus:ring-offset-2 text-base inline-block"
+        >
+          Add New
+        </a>
       </div>
 
       <div className="overflow-x-auto">
@@ -79,7 +107,11 @@ export default async function PostsPage({
             {posts && posts.length > 0 ? (
               posts.map((post) => (
                 <tr key={post.id} className="border-b border-gray-200">
-                  <td className="p-3 text-[#1E3F20]">{getTitle(post)}</td>
+                  <td className="p-3 text-[#1E3F20]">
+                    <a href={`/admin/posts/${post.id}`} className="hover:underline">
+                      {getTitle(post)}
+                    </a>
+                  </td>
                   <td className="p-3 text-[#1E3F20]">{post.post_type}</td>
                   <td className="p-3 text-[#1E3F20]">{post.category || '-'}</td>
                   <td className="p-3 text-[#1E3F20]">{post.status}</td>
