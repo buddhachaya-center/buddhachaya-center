@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react'
 import { savePost } from './actions'
+import MarkdownField from './MarkdownField'
 
 type PostFormProps = {
   mode: 'new' | 'edit'
@@ -123,19 +124,15 @@ export default function PostForm({ mode, postType, isPublished, id, initial }: P
                 className="text-base border border-gray-300 rounded p-2 w-full"
               />
             </div>
-            <div>
-              <label htmlFor="content_my" className="block text-sm font-medium text-[#1E3F20] mb-1">
-                Body {teachingRequired && '(required)'}
-              </label>
-              <textarea
-                id="content_my"
-                name="content_my"
-                rows={12}
-                defaultValue={state.values?.content_my ?? initial.content_my ?? ''}
-                className="text-base border border-gray-300 rounded p-2 w-full"
-              />
-              <p className="text-xs text-gray-600 mt-1">Markdown</p>
-            </div>
+            <MarkdownField
+              id="content_my"
+              name="content_my"
+              label={`Body${teachingRequired ? ' (required)' : ''}`}
+              lang="my"
+              initialValue={state.values?.content_my ?? initial.content_my ?? ''}
+              rows={12}
+              required={teachingRequired}
+            />
           </div>
         </div>
 
@@ -166,19 +163,14 @@ export default function PostForm({ mode, postType, isPublished, id, initial }: P
                 className="text-base border border-gray-300 rounded p-2 w-full"
               />
             </div>
-            <div>
-              <label htmlFor="content_en" className="block text-sm font-medium text-[#1E3F20] mb-1">
-                Body
-              </label>
-              <textarea
-                id="content_en"
-                name="content_en"
-                rows={12}
-                defaultValue={state.values?.content_en ?? initial.content_en ?? ''}
-                className="text-base border border-gray-300 rounded p-2 w-full"
-              />
-              <p className="text-xs text-gray-600 mt-1">Markdown</p>
-            </div>
+            <MarkdownField
+              id="content_en"
+              name="content_en"
+              label="Body"
+              lang="en"
+              initialValue={state.values?.content_en ?? initial.content_en ?? ''}
+              rows={12}
+            />
           </div>
         </div>
 
@@ -209,19 +201,14 @@ export default function PostForm({ mode, postType, isPublished, id, initial }: P
                 className="text-base border border-gray-300 rounded p-2 w-full"
               />
             </div>
-            <div>
-              <label htmlFor="content_de" className="block text-sm font-medium text-[#1E3F20] mb-1">
-                Body
-              </label>
-              <textarea
-                id="content_de"
-                name="content_de"
-                rows={12}
-                defaultValue={state.values?.content_de ?? initial.content_de ?? ''}
-                className="text-base border border-gray-300 rounded p-2 w-full"
-              />
-              <p className="text-xs text-gray-600 mt-1">Markdown</p>
-            </div>
+            <MarkdownField
+              id="content_de"
+              name="content_de"
+              label="Body"
+              lang="de"
+              initialValue={state.values?.content_de ?? initial.content_de ?? ''}
+              rows={12}
+            />
           </div>
         </div>
       </div>
