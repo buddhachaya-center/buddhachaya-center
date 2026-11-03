@@ -3,6 +3,8 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { PostFormState } from './form-state'
+import type { PostActionState } from './form-state'
+import { revalidatePublicPosts } from './revalidate'
 
 export async function savePost(prev: PostFormState, formData: FormData): Promise<PostFormState> {
   const supabase = await createClient()
@@ -155,6 +157,10 @@ export async function savePost(prev: PostFormState, formData: FormData): Promise
     if (!updated || updated.length === 0) {
       return { error: 'Not saved: the post was not found or you do not have permission.', values }
     }
+
+    if (finalStatus === 'published') {
+      revalidatePublicPosts()
+    }
   } else {
     row.post_type = postType
     const { error: insertError } = await supabase.from('posts').insert(row)
@@ -171,4 +177,153 @@ export async function savePost(prev: PostFormState, formData: FormData): Promise
   }
 
   redirect('/admin/posts?saved=1')
+}
+
+async function requireAdmin(): Promise<{ supabase: Awaited<ReturnType<typeof createClient>>, error: string | null }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { supabase, error: 'You are not signed in.' }
+  }
+
+  const { data: staffUser } = await supabase
+    .from('staff_users')
+    .select('role')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (!staffUser || staffUser.role !== 'admin') {
+    return { supabase, error: 'Only an admin can do this.' }
+  }
+
+  return { supabase, error: null }
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+function getId(formData: FormData): { id: string | null, error: string | null } {
+  const id = (formData.get('id') as string || '').trim()
+  if (!id || !UUID_RE.test(id)) {
+    return { id: null, error: 'Invalid post ID.' }
+  }
+  return { id, error: null }
+}
+
+export async function publishPost(prev: PostActionState, formData: FormData): Promise<PostActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: post, error: loadError } = await supabase
+    .from('posts')
+    .select('id, status, published_at')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (loadError || !post) {
+    return { error: 'Post not found.' }
+  }
+
+  if (post.status === 'published') {
+    return { error: 'This post is already published.' }
+  }
+
+  const { data: updated, error: updateError } = await supabase
+    .from('posts')
+    .update({
+      status: 'published',
+      published_at: post.published_at ?? new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select('id')
+
+  if (updateError) {
+    return { error: 'Could not publish the post. Please try again.' }
+  }
+
+  if (!updated || updated.length === 0) {
+    return { error: 'Not published: the post was not found or you do not have permission.' }
+  }
+
+  revalidatePublicPosts()
+  redirect('/admin/posts?done=published')
+}
+
+export async function unpublishPost(prev: PostActionState, formData: FormData): Promise<PostActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: post, error: loadError } = await supabase
+    .from('posts')
+    .select('id, status')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (loadError || !post) {
+    return { error: 'Post not found.' }
+  }
+
+  if (post.status !== 'published') {
+    return { error: 'This post is not published.' }
+  }
+
+  const { data: updated, error: updateError } = await supabase
+    .from('posts')
+    .update({ status: 'draft' })
+    .eq('id', id)
+    .select('id')
+
+  if (updateError) {
+    return { error: 'Could not unpublish the post. Please try again.' }
+  }
+
+  if (!updated || updated.length === 0) {
+    return { error: 'Not unpublished: the post was not found or you do not have permission.' }
+  }
+
+  revalidatePublicPosts()
+  redirect('/admin/posts?done=unpublished')
+}
+
+export async function deletePost(prev: PostActionState, formData: FormData): Promise<PostActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: deleted, error: deleteError } = await supabase
+    .from('posts')
+    .delete()
+    .eq('id', id)
+    .select('id')
+
+  if (deleteError) {
+    return { error: 'Could not delete the post. Please try again.' }
+  }
+
+  if (!deleted || deleted.length === 0) {
+    return { error: 'Not deleted: the post was not found or you do not have permission.' }
+  }
+
+  revalidatePublicPosts()
+  redirect('/admin/posts?done=deleted')
 }
