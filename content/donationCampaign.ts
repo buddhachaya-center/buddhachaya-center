@@ -3,9 +3,9 @@ import type { DonationCampaign } from './types';
 
 export const donationCampaign: Record<ContentLocale, DonationCampaign> = {
   my: {
-    eyebrow: 'ဂျာမနီမှာ မြန်မာကျောင်းတစ်ကျောင်း ပေါ်ပေါက်ရေး',
-    title: 'ကျောင်းအလှူ ကုသိုလ်ဝေစု ဒါနပွဲ',
-    intro: 'ဂျာမနီနိုင်ငံရောက် ဗုဒ္ဓဘာသာဝင်အပေါင်းတို့ရေ၊ ဂျာမနီနိုင်ငံတွင် မြန်မာကျောင်းတစ်ကျောင်း ပေါ်ပေါက်လာစေရန် အတူတကွ စတင်ဆောင်ရွက်ကြပါစို့။ ဆရာတော်ဦးဆောင်သော ဤအစီအစဉ်ကြီးတွင် သင်၏ ကုသိုလ်ဝေစု တစ်စုတစ်ပါး ပါဝင်ခွင့်ရှိပါသည်။',
+    eyebrow: 'ဂျာမနီမြန်မာကျောင်း ဖြစ်မြောက်ရေး',
+    title: 'ကျောင်းအလှူ ကုသိုလ်ဝေစု ဝိဟာရဒါန',
+    intro: 'ဂျာမနီနိုင်ငံနှင့် ကမ္ဘာအရပ်ရပ်မှ သဒ္ဓါကြည်လင်စေတနာရှင်အပေါင်းတို့ ဂျာမနီနိုင်ငံတွင် မြန်မာဗုဒ္ဓဘာသာကျောင်း ပေါ်ပေါက်လာစေရန် အတူတကွ ပါဝင်လှူဒါန်းကြပါစို့။ ဆရာတော်ဦးဆောင်သော ဤအစီအစဥ်တွင် ကုသိုလ်ဝေစုများ ပါဝင်ပြီး ကျောင်းဒကာ, ဒကာမများအဖြစ် ပါဝင်နိုင်ပါသည်။',
     whyTitle: 'ကျောင်း ဘာကြောင့် လိုအပ်သလဲ',
     whyItems: [
       'ရှင်ပြုပွဲ၊ ရဟန်းခံပွဲ၊ သီလရှင်ဝတ်ပွဲနှင့် တရားစခန်းများအတွက် ဆရာတော်သည် ဒိန်းမတ်နိုင်ငံရှိ ကျောင်းသို့ သွားရောက်ဆောင်ရွက်နေရပါသည်။',
@@ -34,9 +34,9 @@ export const donationCampaign: Record<ContentLocale, DonationCampaign> = {
     sadhu: 'သာဓု၊ သာဓု၊ သာဓု'
   },
   en: {
-    eyebrow: 'A Burmese monastery in Germany',
-    title: 'The Monastery Dāna Merit-Share Campaign',
-    intro: 'Dear Buddhists across Germany, let us begin together to bring a Burmese monastery into being here. In this great undertaking, led by the Sayadaw, you are invited to take part with one or more merit shares.',
+    eyebrow: 'Making a Burmese monastery in Germany a reality',
+    title: 'Monastery Offering: Merit Shares and Vihāra Dāna',
+    intro: 'Faithful and generous-hearted friends in Germany and around the world, let us come together to donate so that a Burmese Buddhist monastery can come into being in Germany. This programme, led by the Sayadaw, includes merit shares, and you can take part as a monastery donor.',
     whyTitle: 'Why a monastery is needed',
     whyItems: [
       'For novice ordinations (shinbyu), monk and nun ordinations and meditation retreats, the Sayadaw currently has to travel to a monastery in Denmark.',
@@ -65,9 +65,9 @@ export const donationCampaign: Record<ContentLocale, DonationCampaign> = {
     sadhu: 'Sādhu, Sādhu, Sādhu'
   },
   de: {
-    eyebrow: 'Ein burmesisches Kloster in Deutschland',
-    title: 'Dāna-Aktion: Anteile für das Kloster',
-    intro: 'Liebe Buddhistinnen und Buddhisten in Deutschland, lasst uns gemeinsam den Weg zu einem burmesischen Kloster in Deutschland beginnen. An diesem großen Vorhaben unter der Leitung des Sayadaw können Sie mit einem oder mehreren Dāna-Anteilen teilhaben.',
+    eyebrow: 'Ein burmesisches Kloster in Deutschland verwirklichen',
+    title: 'Klosterspende: Dāna-Anteile und Vihāra-Dāna',
+    intro: 'Liebe gläubige und gebefreudige Buddhistinnen und Buddhisten in Deutschland und weltweit, lasst uns gemeinsam spenden, damit in Deutschland ein burmesisches buddhistisches Kloster entstehen kann. An diesem Vorhaben unter der Leitung des Sayadaw gibt es Dāna-Anteile, und Sie können als Spenderin oder Spender des Klosters teilnehmen.',
     whyTitle: 'Warum ein Kloster notwendig ist',
     whyItems: [
       'Für Novizenordinationen (Shinbyu), Mönchs- und Nonnenordinationen sowie Meditationsretreats muss der Sayadaw derzeit in ein Kloster in Dänemark reisen.',
