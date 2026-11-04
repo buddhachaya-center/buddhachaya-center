@@ -48,7 +48,7 @@ export const welcomeTranslations: Record<ContentLocale, WelcomeData> = {
 
 export const biographyTranslations: Record<ContentLocale, BiographyData> = {
   my: {
-    title: 'ဆရာတော်ကြီး၏ အတ္ထုပ္ပတ္တိ',
+    title: 'ဆရာတော်၏ ထေရုပ္ပတ္တိ',
     sayadawName: 'အရှင်ကုသလသာမိ',
     sayadawTitle: 'သာသနဓဇဓမ္မာစရိယ၊ B.A. (ဗုဒ္ဓဓမ္မ)၊ M.A. (Kelaniya University)',
     fullBiography: [
@@ -61,7 +61,7 @@ export const biographyTranslations: Record<ContentLocale, BiographyData> = {
       '• မလေးရှားနိုင်ငံ၊ ပီနန်းမြို့ရှိ Dhammikarama Myanmar Temple တွင် တရုတ်နှင့် မြန်မာ တပည့်ဒါယကာ၊ ဒါယိကာမများအား တရားကမ္မဋ္ဌာန်း ပြသညွှန်ပြခဲ့သည်။ (၂၀၁၀ – ၂၀၁၁)',
       'ထုတ်ဝေခဲ့သည့် စာအုပ်များ: မြန်မာဘာသာဖြင့် စာအုပ် (၅) အုပ်နှင့် သုတေသန ဆောင်းပါးများစွာ',
       'လက်ရှိဆောင်ရွက်ချက်များ:',
-      '• Goethe University Frankfurt (ဂျာမနီနိုင်ငံ)၊ အရှေ့တောင်အာရှ လေ့လာရေးဌာနတွင် နည်းပြဆရာအဖြစ် ဆောင်ရွက်လျက်ရှိသည်။',
+      '• Goethe University Frankfurt (ဂျာမနီနိုင်ငံ)တွင် ၂၀၁၆ မှ ၂၀၂၆ အထိ အရှေ့တောင်အာရှ လေ့လာရေးဌာနတွင် နည်းပြဆရာအဖြစ် သင်ကြားပို့ချခဲ့ပါသည်။',
       '• Myanmar Buddhist Center (ဂျာမနီနိုင်ငံ) ၏ ကျောင်းထိုင်ဆရာတော်',
       '• Dhammachaya Myanmar Buddhist Center (ဒိန်းမတ်နိုင်ငံ) ၏ တည်ထောင်သူနှင့် သဘာပတိ',
       '• မြန်မာလူမျိုးများနှင့် ဥရောပတိုက်သားများအား တရားကမ္မဋ္ဌာန်း ပြသညွှန်ပြခြင်းနှင့် ဗုဒ္ဓဓမ္မ သင်ကြားပေးခြင်း',
@@ -69,7 +69,7 @@ export const biographyTranslations: Record<ContentLocale, BiographyData> = {
     ]
   },
   en: {
-    title: 'Biography of the Sayadaw',
+    title: 'Biography of the Venerable Sayadaw',
     sayadawName: 'Ashin Kusalasami',
     sayadawTitle: 'Sasanadhaja Dhammacariya, B.A. (Buddha Dhamma), M.A. (Kelaniya University)',
     fullBiography: [
@@ -82,7 +82,7 @@ export const biographyTranslations: Record<ContentLocale, BiographyData> = {
       '• Instructed meditation to Chinese and Myanmar devotees at Dhammikarama Myanmar Temple in Penang, Malaysia (2010–2011).',
       'Publications: 5 books published in Myanmar language and numerous research articles.',
       'Current Roles & Activities:',
-      '• Lecturer/Instructor at Goethe University Frankfurt (Germany), Department of Southeast Asian Studies.',
+      '• Taught as a lecturer at the Department of Southeast Asian Studies, Goethe University Frankfurt (Germany), from 2016 to 2026.',
       '• Presiding Monk / Abbot of Myanmar Buddhist Center (Germany).',
       '• Founder and Chairman of Dhammachaya Myanmar Buddhist Center (Denmark).',
       '• Teaching Buddha Dhamma and guiding meditation for both Myanmar communities and European practitioners.',
@@ -90,7 +90,7 @@ export const biographyTranslations: Record<ContentLocale, BiographyData> = {
     ]
   },
   de: {
-    title: 'Biografie des Sayadaw',
+    title: 'Biografie des ehrwürdigen Sayadaw',
     sayadawName: 'Ashin Kusalasami',
     sayadawTitle: 'Sasanadhaja Dhammacariya, B.A. (Buddha Dhamma), M.A. (Kelaniya Universität)',
     fullBiography: [
@@ -103,7 +103,7 @@ export const biographyTranslations: Record<ContentLocale, BiographyData> = {
       '• Meditationslehrer für chinesische und burmesische Anhänger im Dhammikarama Myanmar Tempel in Penang, Malaysia (2010–2011).',
       'Veröffentlichungen: 5 Bücher in myanmarischer Sprache und zahlreiche Forschungsartikel.',
       'Derzeitige Aktivitäten & Positionen:',
-      '• Dozent am Institut für Südostasienwissenschaften der Goethe-Universität Frankfurt (Deutschland).',
+      '• Von 2016 bis 2026 Lehrbeauftragter am Institut für Südostasienwissenschaften der Goethe-Universität Frankfurt (Deutschland).',
       '• Abt / Leitender Mönch des Myanmar Buddhist Center (Deutschland).',
       '• Gründer und Vorsitzender des Dhammachaya Myanmar Buddhist Center (Dänemark).',
       '• Unterweisung in Buddha-Dhamma und Anleitung zur Meditation für die myanmarische Gemeinschaft und europäische Praktizierende.',
