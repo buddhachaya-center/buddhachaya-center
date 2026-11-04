@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Locale } from '@/lib/i18n';
 import { contentSuffix } from '@/lib/i18n';
-import { IMAGE_ASSETS, welcomeTranslations } from '@/content/site';
+import { IMAGE_ASSETS } from '@/content/site';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -14,18 +14,23 @@ interface HeroProps {
 
 export default function Hero({ locale }: HeroProps) {
   const contentLocale = contentSuffix[locale];
-  const trans = welcomeTranslations[contentLocale];
+  const heroTitle =
+    contentLocale === 'my'
+      ? 'ဗုဒ္ဓအရိပ်မှာ ငြိမ်းချမ်းပါစေ။'
+      : contentLocale === 'de'
+      ? 'Möge der friedvolle Schatten des Buddha Ihnen ewigen Frieden bringen.'
+      : "May the Buddha's serene shade bring you eternal peace.";
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
       image: IMAGE_ASSETS.hero,
-      title: trans.title,
+      title: heroTitle,
       alignment: 'center'
     },
     {
       image: IMAGE_ASSETS.monastery,
-      title: contentLocale === 'my' ? 'ဗုဒ္ဓဆာယာ ဗုဒ္ဓအရိပ် သာသနာပြုကျောင်း' : contentLocale === 'de' ? 'Buddhachaya Kloster & Meditationszentrum' : 'Buddhachaya Monastery & Meditation Center',
+      title: heroTitle,
       alignment: 'center'
     }
   ];
@@ -86,12 +91,6 @@ export default function Hero({ locale }: HeroProps) {
               transition={{ duration: 0.5 }}
               className="flex flex-col items-center justify-center space-y-4"
             >
-              {trans.subtitle && (
-                <div className="inline-block rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/45 px-4 py-1 text-xs sm:text-sm font-semibold tracking-wider text-[#FAF9F5] uppercase">
-                  {trans.subtitle}
-                </div>
-              )}
-              
               <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#FAF9F5] drop-shadow-md leading-tight max-w-xl sm:max-w-3xl">
                 {slides[currentSlide].title}
               </h1>
