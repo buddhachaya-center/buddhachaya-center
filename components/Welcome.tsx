@@ -57,12 +57,9 @@ export default function Welcome({ locale }: WelcomeProps) {
                 >
                   {contentLocale === 'my' ? 'ဆရာတော်၏နောက်ခံသမိုင်းဖတ်ရန်' : contentLocale === 'de' ? 'Abt-Biografie lesen' : "Read Sayadaw's Biography"}
                 </Link>
-                <Link
-                  href={`/${locale}/monastery`}
-                  className="rounded-md border border-transparent hover:bg-[#F4F1EA] text-[#334155] underline hover:no-underline px-3 py-2 text-sm font-semibold transition-all duration-200"
-                >
+                <span className="text-[#334155] px-3 py-2 text-sm font-semibold">
                   {contentLocale === 'my' ? 'ရိပ်သာတည်းဆောက်ပုံလေ့လာရန် →' : contentLocale === 'de' ? 'Über das Kloster lernen →' : 'Learn About Monastery →'}
-                </Link>
+                </span>
               </div>
             </div>
 
