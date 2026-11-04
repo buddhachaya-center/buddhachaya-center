@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { isLocale, contentSuffix, type Locale } from '@/lib/i18n';
-import { getPostBySlug } from '@/lib/posts';
+import { getPostBySlug, safeImageUrl } from '@/lib/posts';
 import { pickText } from '@/lib/t';
 import PostBody from '@/components/PostBody';
 import { localeAlternates } from '@/lib/seo';
@@ -72,6 +72,8 @@ export default async function Page({
     notFound();
   }
 
+  const cover = safeImageUrl(post.cover_image_url);
+
   const backText =
     locale === 'mm'
       ? 'တရားဒေသနာများသို့ ပြန်သွားရန်'
@@ -113,6 +115,10 @@ export default async function Page({
         >
           {title.text}
         </h1>
+
+        {cover && (
+          <img src={cover} alt="" className="mb-6 w-full h-auto rounded-lg" />
+        )}
 
         <div className="border-t border-[#E5E1D4] pt-6">
           <PostBody markdown={content.text} lang={content.lang} />
