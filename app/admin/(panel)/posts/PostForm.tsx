@@ -131,7 +131,6 @@ export default function PostForm({ mode, postType, isPublished, id, initial }: P
               lang="my"
               initialValue={state.values?.content_my ?? initial.content_my ?? ''}
               rows={12}
-              required={teachingRequired}
             />
           </div>
         </div>
