@@ -33,6 +33,7 @@ export interface DhammaArticle {
   date: string;
   language: 'en' | 'my' | 'de' | 'all';
   slug?: string;
+  image?: string;
 }
 
 export interface DhammaVideo {

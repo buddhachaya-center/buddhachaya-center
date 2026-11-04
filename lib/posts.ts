@@ -53,6 +53,14 @@ export async function getPublishedPosts(limit = 20, postType?: string): Promise<
   return data || [];
 }
 
+export function safeImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  const u = url.trim();
+  if (u.startsWith('/') && !u.startsWith('//')) return u;
+  if (u.startsWith('https://')) return u;
+  return null;
+}
+
 export function postToArticle(post: PostListItem, locale: ContentLocale): DhammaArticle | null {
   const title = pickText({ my: post.title_my, en: post.title_en, de: post.title_de }, locale);
   if (!title) return null;
@@ -69,6 +77,7 @@ export function postToArticle(post: PostListItem, locale: ContentLocale): Dhamma
     date: post.published_at ? post.published_at.slice(0, 10) : '',
     language: title.lang,
     slug: post.slug,
+    image: safeImageUrl(post.cover_image_url) ?? undefined,
   };
 }
 

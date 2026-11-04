@@ -31,6 +31,14 @@ function ArticleCard({
       onClick={onClick}
       id={`article-${art.id}`}
     >
+      {art.image && (
+        <img
+          src={art.image}
+          alt=""
+          loading="lazy"
+          className="mb-4 w-full aspect-video object-cover rounded-lg"
+        />
+      )}
       <div className="flex items-center justify-between mb-3">
         <span className="text-[10px] sm:text-xs font-mono font-bold tracking-widest text-[#1E3F20] uppercase">
           {art.author}
