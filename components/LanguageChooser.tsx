@@ -94,9 +94,9 @@ export default function LanguageChooser() {
           {/* Middle Section: Buddha's Shade & Monastery Title Statements */}
           <div className="px-6 py-8 sm:px-10 text-center bg-[#FAF9F5] border-b border-[#E5E4E2]">
             <div className="max-w-2xl mx-auto space-y-3">
-              {/* Line 1: ဘုရားရိပ်မှာ ငြိမ်းချမ်းပါစေ။ ဗုဒ္ဓအရိပ်မှာ ငြိမ်းချမ်းပါစေ။ */}
+              {/* Line 1: ဗုဒ္ဓအရိပ်မှာ ငြိမ်းချမ်းပါစေ။ */}
               <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#1E3A5F] tracking-tight leading-snug">
-                ဘုရားရိပ်မှာ ငြိမ်းချမ်းပါစေ။ ဗုဒ္ဓအရိပ်မှာ ငြိမ်းချမ်းပါစေ။
+                ဗုဒ္ဓအရိပ်မှာ ငြိမ်းချမ်းပါစေ။
               </h2>
 
               <div className="w-12 h-0.5 bg-[#C0A47D]/60 mx-auto my-4" />
