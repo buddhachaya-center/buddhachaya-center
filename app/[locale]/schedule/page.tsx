@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
-import { type Locale } from '@/lib/i18n';
+import { type Locale, contentSuffix } from '@/lib/i18n';
 import { uiStrings } from '@/content/ui';
 import Schedule from '@/components/Schedule';
 import { localeAlternates } from '@/lib/seo';
+import { getPublishedEvents, eventToScheduled } from '@/lib/events';
+import type { ScheduledEvent } from '@/content/types';
+
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
@@ -23,5 +27,12 @@ export default async function SchedulePage({
 }) {
   const { locale } = await params;
 
-  return <Schedule locale={locale as Locale} />;
+  const rows = await getPublishedEvents();
+  const dbEvents = rows === null
+    ? null
+    : rows
+        .map((r) => eventToScheduled(r, contentSuffix[locale as Locale]))
+        .filter((e): e is ScheduledEvent => e !== null);
+
+  return <Schedule locale={locale as Locale} dbEvents={dbEvents} />;
 }
