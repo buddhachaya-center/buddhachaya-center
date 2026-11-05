@@ -82,12 +82,13 @@ export interface ScheduledEvent {
   location: string;
   description: string;
   category: 'annual' | 'weekly' | 'special';
-  calendarLink: {
+  calendarLink?: {
     title: string;
     description: string;
     location: string;
     startDate: string; // YYYYMMDDTHHMMSS
     endDate: string;
+    recur?: string;
   };
 }
 

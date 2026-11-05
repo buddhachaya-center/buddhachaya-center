@@ -11,12 +11,13 @@ import Link from 'next/link';
 
 interface ScheduleProps {
   locale: Locale;
+  dbEvents?: ScheduledEvent[] | null;
 }
 
-export default function Schedule({ locale }: ScheduleProps) {
+export default function Schedule({ locale, dbEvents }: ScheduleProps) {
   const contentLocale = contentSuffix[locale];
   const [filter, setFilter] = useState<'all' | 'annual' | 'weekly'>('all');
-  const events = scheduledEvents[contentLocale];
+  const events = dbEvents ?? scheduledEvents[contentLocale];
 
   const filteredEvents = events.filter((ev) => {
     if (filter === 'all') return true;
@@ -24,13 +25,14 @@ export default function Schedule({ locale }: ScheduleProps) {
   });
 
   // Dynamically generate Google Calendar Link
-  const getGoogleCalendarLink = (linkData: ScheduledEvent['calendarLink']) => {
+  const getGoogleCalendarLink = (linkData: NonNullable<ScheduledEvent['calendarLink']>) => {
     const base = 'https://calendar.google.com/calendar/render?action=TEMPLATE';
     const text = encodeURIComponent(linkData.title);
     const dates = encodeURIComponent(`${linkData.startDate}/${linkData.endDate}`);
     const details = encodeURIComponent(linkData.description);
     const location = encodeURIComponent(linkData.location);
-    return `${base}&text=${text}&dates=${dates}&details=${details}&location=${location}`;
+    const recur = linkData.recur ? `&recur=${encodeURIComponent(linkData.recur)}` : '';
+    return `${base}&text=${text}&dates=${dates}&details=${details}&location=${location}&ctz=${encodeURIComponent('Europe/Berlin')}${recur}`;
   };
 
   return (
@@ -75,6 +77,16 @@ export default function Schedule({ locale }: ScheduleProps) {
           ))}
         </div>
 
+        {filteredEvents.length === 0 && (
+          <p className="text-center text-sm sm:text-base text-[#334155]/80 max-w-2xl mx-auto mb-12">
+            {contentLocale === 'my'
+              ? 'လက်ရှိ ကျင်းပမည့် အစီအစဉ် မရှိသေးပါ။'
+              : contentLocale === 'de'
+                ? 'Zurzeit sind keine Veranstaltungen geplant.'
+                : 'No events are scheduled at the moment.'}
+          </p>
+        )}
+
         {/* Timeline / Event Cards list */}
         <div className="max-w-4xl mx-auto space-y-6">
           <AnimatePresence mode="popLayout">
@@ -108,51 +120,65 @@ export default function Schedule({ locale }: ScheduleProps) {
                     {ev.title}
                   </h3>
 
-                  <p className="text-sm sm:text-base text-[#334155]/90 leading-relaxed max-w-2xl text-justify">
-                    {ev.description}
-                  </p>
+                  {ev.description && (
+                    <p className="text-sm sm:text-base text-[#334155]/90 leading-relaxed max-w-2xl text-justify">
+                      {ev.description}
+                    </p>
+                  )}
 
                   {/* Scheduling and location indexes */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 text-xs font-mono text-[#334155]/75 border-t border-[#E5E1D4]/45">
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="h-4 w-4 text-[#1E3F20]" />
-                      <span>{ev.dateStr}</span>
+                  {(ev.dateStr || ev.timeStr || ev.location) && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 text-xs font-mono text-[#334155]/75 border-t border-[#E5E1D4]/45">
+                      {ev.dateStr && (
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="h-4 w-4 text-[#1E3F20]" />
+                          <span>{ev.dateStr}</span>
+                        </div>
+                      )}
+                      {ev.timeStr && (
+                        <div className="flex items-center space-x-2">
+                          <Clock className="h-4 w-4 text-[#1E3F20]" />
+                          <span>{ev.timeStr}</span>
+                        </div>
+                      )}
+                      {ev.location && (
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="h-4 w-4 text-[#1E3F20]" />
+                          <span>{ev.location}</span>
+                        </div>
+                      )}
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock className="h-4 w-4 text-[#1E3F20]" />
-                      <span>{ev.timeStr}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <MapPin className="h-4 w-4 text-[#1E3F20]" />
-                      <span>{ev.location}</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Calendar action buttons */}
-                <div className="w-full md:w-auto flex md:flex-col items-center justify-end gap-3 shrink-0">
-                  <a
-                    href={getGoogleCalendarLink(ev.calendarLink)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center space-x-1 w-full md:w-auto px-4 py-2.5 bg-white hover:bg-slate-50 border border-[#E5E1D4] text-[#1E3F20] font-bold text-xs rounded-md shadow-sm transition-colors text-center"
-                    title="Add into Google calendar"
-                  >
-                    <CalendarPlus className="h-4 w-4 mr-1.5" />
-                    <span>{contentLocale === 'my' ? 'Google ပြက္ခဒိန်ထည့်ရန်' : contentLocale === 'de' ? 'In Kalender eintragen' : 'Google Calendar'}</span>
-                  </a>
+                {(ev.calendarLink || ev.category === 'weekly') && (
+                  <div className="w-full md:w-auto flex md:flex-col items-center justify-end gap-3 shrink-0">
+                    {ev.calendarLink && (
+                      <a
+                        href={getGoogleCalendarLink(ev.calendarLink)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center space-x-1 w-full md:w-auto px-4 py-2.5 bg-white hover:bg-slate-50 border border-[#E5E1D4] text-[#1E3F20] font-bold text-xs rounded-md shadow-sm transition-colors text-center"
+                        title="Add into Google calendar"
+                      >
+                        <CalendarPlus className="h-4 w-4 mr-1.5" />
+                        <span>{contentLocale === 'my' ? 'Google ပြက္ခဒိန်ထည့်ရန်' : contentLocale === 'de' ? 'In Kalender eintragen' : 'Google Calendar'}</span>
+                      </a>
+                    )}
 
-                  {/* Zoom Classroom helper shortcut link if weekly meditation */}
-                  {ev.category === 'weekly' && (
-                    <Link
-                      href={`/${locale}/courses`}
-                      className="flex items-center justify-center w-full md:w-auto px-4 py-2.5 bg-[#1E3F20] text-white hover:bg-emerald-800 font-bold text-xs rounded-md shadow-sm transition-colors text-center"
-                    >
-                      <span>{contentLocale === 'my' ? 'တိုက်ရိုက်လင့်ခ်' : contentLocale === 'de' ? 'Zoom-Link' : 'Access Zoom Link'}</span>
-                      <ChevronRight className="h-3.5 w-3.5 ml-1" />
-                    </Link>
-                  )}
-                </div>
+                    {/* Zoom Classroom helper shortcut link if weekly meditation */}
+                    {ev.category === 'weekly' && (
+                      <Link
+                        href={`/${locale}/courses`}
+                        className="flex items-center justify-center w-full md:w-auto px-4 py-2.5 bg-[#1E3F20] text-white hover:bg-emerald-800 font-bold text-xs rounded-md shadow-sm transition-colors text-center"
+                      >
+                        <span>{contentLocale === 'my' ? 'တိုက်ရိုက်လင့်ခ်' : contentLocale === 'de' ? 'Zoom-Link' : 'Access Zoom Link'}</span>
+                        <ChevronRight className="h-3.5 w-3.5 ml-1" />
+                      </Link>
+                    )}
+                  </div>
+                )}
 
               </motion.div>
             ))}
