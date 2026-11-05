@@ -29,6 +29,8 @@ export async function savePost(prev: PostFormState, formData: FormData): Promise
   const content_my = (formData.get('content_my') as string || '').trim()
   const content_en = (formData.get('content_en') as string || '').trim()
   const content_de = (formData.get('content_de') as string || '').trim()
+  const cover = formData.get('cover')
+  const removeCover = formData.get('remove_cover') === '1'
 
   const values: Record<string, string> = {
     id,
@@ -119,6 +121,18 @@ export async function savePost(prev: PostFormState, formData: FormData): Promise
     published_at = `${published_on}T00:00:00Z`
   }
 
+  let coverBytes: Uint8Array | null = null
+  if (cover instanceof File && cover.size > 0) {
+    if (cover.type !== 'image/jpeg' || cover.size > 700 * 1024) {
+      return { error: 'The picture must be a JPEG of at most 700 KB.', values }
+    }
+    const bytes = new Uint8Array(await cover.arrayBuffer())
+    if (bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes[2] !== 0xff) {
+      return { error: 'The picture must be a JPEG of at most 700 KB.', values }
+    }
+    coverBytes = bytes
+  }
+
   const finalAuthor = author || 'Sayadaw Ashin Kusalasami'
 
   const row: Record<string, unknown> = {
@@ -135,6 +149,26 @@ export async function savePost(prev: PostFormState, formData: FormData): Promise
     content_my: content_my || null,
     content_en: content_en || null,
     content_de: content_de || null,
+  }
+
+  if (coverBytes) {
+    const path = `posts/${crypto.randomUUID()}.jpg`
+    const { error: uploadError } = await supabase
+      .storage
+      .from('dhamma-media')
+      .upload(path, coverBytes, { contentType: 'image/jpeg', upsert: false })
+
+    if (uploadError) {
+      return { error: 'The picture could not be uploaded. Please try again.', values }
+    }
+
+    row.cover_image_url = supabase
+      .storage
+      .from('dhamma-media')
+      .getPublicUrl(path)
+      .data.publicUrl
+  } else if (removeCover) {
+    row.cover_image_url = null
   }
 
   if (id) {

@@ -19,6 +19,7 @@ type PostRow = {
   content_my: string | null
   content_en: string | null
   content_de: string | null
+  cover_image_url: string | null
 }
 
 export default async function EditPostPage({
@@ -37,7 +38,7 @@ export default async function EditPostPage({
 
   const { data: post, error: postError } = await supabase
     .from('posts')
-    .select('id, slug, post_type, status, published_at, author, title_my, title_en, title_de, excerpt_my, excerpt_en, excerpt_de, content_my, content_en, content_de')
+    .select('id, slug, post_type, status, published_at, author, title_my, title_en, title_de, excerpt_my, excerpt_en, excerpt_de, content_my, content_en, content_de, cover_image_url')
     .eq('id', id)
     .maybeSingle()
 
@@ -88,6 +89,7 @@ export default async function EditPostPage({
     content_my: post.content_my || '',
     content_en: post.content_en || '',
     content_de: post.content_de || '',
+    cover_image_url: post.cover_image_url || '',
   }
 
   const postType = post.post_type === 'blog' ? 'blog' : 'teaching'
