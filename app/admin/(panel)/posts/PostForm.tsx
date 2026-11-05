@@ -1,8 +1,11 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
+import type { ChangeEvent } from 'react'
+import { ImagePlus } from 'lucide-react'
 import { savePost } from './actions'
 import MarkdownField from './MarkdownField'
+import { resizeToJpeg } from './cover-image'
 
 type PostFormProps = {
   mode: 'new' | 'edit'
@@ -16,6 +19,47 @@ export default function PostForm({ mode, postType, isPublished, id, initial }: P
   const [state, formAction, isPending] = useActionState(savePost, { error: null, values: null })
 
   const teachingRequired = postType === 'teaching'
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null)
+  const [coverError, setCoverError] = useState<string | null>(null)
+
+  const coverPreview = coverPreviewUrl || initial.cover_image_url || ''
+
+  useEffect(() => {
+    if (!state.error) return
+    setCoverPreviewUrl((previous) => {
+      if (previous) URL.revokeObjectURL(previous)
+      return null
+    })
+    setCoverError(null)
+  }, [state])
+
+  async function onCoverChange(event: ChangeEvent<HTMLInputElement>) {
+    const input = event.currentTarget
+    const file = input.files?.[0]
+    if (!file) {
+      setCoverPreviewUrl(null)
+      setCoverError(null)
+      return
+    }
+    try {
+      const resized = await resizeToJpeg(file)
+      if (resized.size > 700 * 1024) {
+        throw new Error('Picture is too large.')
+      }
+      const dataTransfer = new DataTransfer()
+      dataTransfer.items.add(resized)
+      input.files = dataTransfer.files
+      setCoverPreviewUrl((previous) => {
+        if (previous) URL.revokeObjectURL(previous)
+        return URL.createObjectURL(resized)
+      })
+      setCoverError(null)
+    } catch {
+      input.value = ''
+      setCoverPreviewUrl(null)
+      setCoverError('Could not prepare this picture. Try a smaller one.')
+    }
+  }
 
   return (
     <form action={formAction} className="space-y-6">
@@ -94,6 +138,57 @@ export default function PostForm({ mode, postType, isPublished, id, initial }: P
           className="text-base border border-gray-300 rounded p-2 w-full"
         />
         <p className="text-xs text-gray-600 mt-1">Optional</p>
+      </div>
+
+      <div>
+        <label htmlFor="cover" className="block text-sm font-medium text-[#1E3F20] mb-1">
+          Picture (optional)
+        </label>
+        <input
+          type="file"
+          id="cover"
+          name="cover"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={onCoverChange}
+          className="peer sr-only"
+        />
+        <label
+          htmlFor="cover"
+          className="mt-1 inline-flex items-center gap-2 cursor-pointer rounded border border-[#1E3F20] px-4 py-2 text-base text-[#1E3F20] hover:bg-[#1E3F20]/10 focus-within:ring-2 focus-within:ring-[#1E3F20] peer-focus-visible:ring-2 peer-focus-visible:ring-[#1E3F20]"
+        >
+          <ImagePlus className="h-5 w-5" aria-hidden="true" />
+          {coverPreview ? 'Change picture' : 'Choose picture'}
+        </label>
+        <p className="mt-1 text-sm text-gray-600">
+          Tap the button to choose a photo from your phone or computer. It is resized automatically.
+        </p>
+        {coverPreviewUrl && (
+          <p className="mt-1 text-sm text-[#1E3F20]">New picture ready. It is saved when you press Save.</p>
+        )}
+        {coverPreview && (
+          <img
+            src={coverPreview}
+            alt=""
+            className="mt-3 max-w-xs max-h-48 rounded border border-gray-300"
+          />
+        )}
+        {coverPreview && (
+          <label className="mt-2 flex items-center gap-2 text-sm text-[#1E3F20]">
+            <input type="checkbox" name="remove_cover" value="1" className="h-4 w-4" />
+            Remove picture
+          </label>
+        )}
+        {coverError && (
+          <p className="mt-2 text-sm text-red-600">{coverError}</p>
+        )}
+        {state.error && (
+          <p className="mt-2 text-sm text-gray-600">Please choose the picture again.</p>
+        )}
+        <p className="text-xs text-gray-600 mt-2">
+          Only upload photos you have permission to publish. Photos of people need
+          their consent. Blur or crop bank data or personal details of donors
+          before uploading.
+        </p>
       </div>
 
       <div className="space-y-6">
