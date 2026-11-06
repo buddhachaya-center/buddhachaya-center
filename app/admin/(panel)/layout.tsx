@@ -50,6 +50,7 @@ export default async function AdminPanelLayout({
         <div className="flex items-center gap-4">
           <h1 className="text-lg font-semibold">Admin</h1>
           <a href="/admin/posts" className="text-sm hover:underline focus:outline-none">Posts</a>
+          <a href="/admin/schedule" className="text-sm hover:underline focus:outline-none">Schedule</a>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm">{staffUser.display_name || ''}</span>
