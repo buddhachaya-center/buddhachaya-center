@@ -30,7 +30,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat('en-GB', {
 export default async function SchedulePage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; saved?: string }>
+  searchParams: Promise<{ status?: string; saved?: string; done?: string }>
 }) {
   const params = await searchParams
   const supabase = await createClient()
@@ -91,6 +91,16 @@ export default async function SchedulePage({
 
       {params.saved === '1' && (
         <p className="text-green-700 text-sm mb-4">Saved.</p>
+      )}
+
+      {params.done === 'published' && (
+        <p className="text-green-700 text-sm mb-4">Published.</p>
+      )}
+      {params.done === 'unpublished' && (
+        <p className="text-green-700 text-sm mb-4">Unpublished.</p>
+      )}
+      {params.done === 'deleted' && (
+        <p className="text-green-700 text-sm mb-4">Deleted.</p>
       )}
 
       <div className="flex gap-4 mb-6 text-sm text-[#1E3F20]">
