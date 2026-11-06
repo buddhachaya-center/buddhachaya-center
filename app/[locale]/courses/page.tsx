@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
-import { type Locale } from '@/lib/i18n';
+import { type Locale, contentSuffix } from '@/lib/i18n';
 import { uiStrings } from '@/content/ui';
 import Courses from '@/components/Courses';
 import { localeAlternates } from '@/lib/seo';
+import { getPublishedCourses, courseToDetail } from '@/lib/courses';
+import type { CourseDetail } from '@/content/types';
+
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
@@ -23,5 +27,12 @@ export default async function CoursesPage({
 }) {
   const { locale } = await params;
 
-  return <Courses locale={locale as Locale} />;
+  const rows = await getPublishedCourses();
+  const dbCourses = rows === null
+    ? undefined
+    : rows
+        .map((r) => courseToDetail(r, contentSuffix[locale as Locale]))
+        .filter((c): c is CourseDetail => c !== null);
+
+  return <Courses locale={locale as Locale} dbCourses={dbCourses} />;
 }
