@@ -10,12 +10,13 @@ import { BookOpen, GraduationCap, Video, Calendar, Clock, Users, ChevronRight, X
 
 interface CoursesProps {
   locale: Locale;
+  dbCourses?: CourseDetail[];
 }
 
-export default function Courses({ locale }: CoursesProps) {
+export default function Courses({ locale, dbCourses }: CoursesProps) {
   const contentLocale = contentSuffix[locale];
   const [selectedCourse, setSelectedCourse] = useState<CourseDetail | null>(null);
-  const courses = courseTranslations[contentLocale];
+  const courses = dbCourses ?? courseTranslations[contentLocale];
 
   const courseIcons: Record<string, React.ReactNode> = {
     'course-abha': <GraduationCap className="h-6 w-6 text-[#1E3F20]" />,
@@ -48,6 +49,15 @@ export default function Courses({ locale }: CoursesProps) {
         </div>
 
         {/* Course Cards Grid */}
+        {courses.length === 0 ? (
+          <p className="text-center text-sm text-[#334155]/70 py-12">
+            {contentLocale === 'my'
+              ? 'လက်ရှိ ဖွင့်လှစ်ထားသော သင်တန်း မရှိသေးပါ။'
+              : contentLocale === 'de'
+                ? 'Derzeit sind keine Kurse veröffentlicht.'
+                : 'No courses are published yet.'}
+          </p>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {courses.map((course) => (
             <div
@@ -62,17 +72,21 @@ export default function Courses({ locale }: CoursesProps) {
                   {courseIcons[course.id] || <BookOpen className="h-6 w-6 text-[#1E3F20]" />}
                 </div>
 
-                <span className="text-[10px] font-mono font-bold tracking-widest text-[#334155]/60 uppercase">
-                  {course.duration}
-                </span>
-                
+                {course.duration && (
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-[#334155]/60 uppercase">
+                    {course.duration}
+                  </span>
+                )}
+
                 <h3 className="font-display font-extrabold text-xl text-slate-800 group-hover:text-[#1E3F20] transition-colors mt-2 mb-3 leading-snug">
                   {course.title}
                 </h3>
-                
-                <p className="text-xs text-[#1E3F20]/90 font-semibold tracking-tight italic">
-                  {course.subtitle}
-                </p>
+
+                {course.subtitle && (
+                  <p className="text-xs text-[#1E3F20]/90 font-semibold tracking-tight italic">
+                    {course.subtitle}
+                  </p>
+                )}
                 
                 <p className="text-sm text-[#334155]/85 mt-4 leading-relaxed line-clamp-3">
                   {course.description}
@@ -89,6 +103,7 @@ export default function Courses({ locale }: CoursesProps) {
             </div>
           ))}
         </div>
+        )}
 
         {/* Detailed Modal Overlay */}
         <AnimatePresence>
@@ -118,9 +133,11 @@ export default function Courses({ locale }: CoursesProps) {
                   <h3 className="font-display font-black text-2xl sm:text-3xl text-[#1E3F20] leading-tight mt-4">
                     {selectedCourse.title}
                   </h3>
-                  <p className="text-base text-[#334155]/90 italic mt-1 font-medium">
-                    {selectedCourse.subtitle}
-                  </p>
+                  {selectedCourse.subtitle && (
+                    <p className="text-base text-[#334155]/90 italic mt-1 font-medium">
+                      {selectedCourse.subtitle}
+                    </p>
+                  )}
                 </div>
 
                 <div className="border-t border-[#E5E1D4] py-6 space-y-6 text-[#334155]">
@@ -130,6 +147,7 @@ export default function Courses({ locale }: CoursesProps) {
                   </p>
 
                   {/* Learning Objectives */}
+                  {selectedCourse.objectives.length > 0 && (
                   <div>
                     <h4 className="font-display font-bold text-sm sm:text-base text-[#1E3F20] mb-3 uppercase tracking-wider">
                       {selectedCourse.objectivesTitle}
@@ -145,8 +163,10 @@ export default function Courses({ locale }: CoursesProps) {
                       ))}
                     </ul>
                   </div>
+                  )}
 
                   {/* Scheduling block */}
+                  {selectedCourse.scheduleDetails && (
                   <div className="rounded-xl bg-[#F4F1EA] p-5 border border-[#E5E1D4]">
                     <h4 className="font-display font-bold text-sm text-[#1E3F20] mb-2 uppercase tracking-wide flex items-center">
                       <Calendar className="h-4 w-4 mr-2" />
@@ -159,6 +179,7 @@ export default function Courses({ locale }: CoursesProps) {
                       Target Group: {selectedCourse.targetAudience}
                     </p>
                   </div>
+                  )}
 
                   {/* Zoom Classroom Integration if available */}
                   {selectedCourse.zoomLink && (
