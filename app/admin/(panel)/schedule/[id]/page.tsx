@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import ScheduleForm from '../ScheduleForm'
+import ScheduleActions from '../ScheduleActions'
 import { utcToBerlin } from '../berlin-time'
 
 const TEXT_FIELDS = [
@@ -99,6 +100,10 @@ export default async function EditEventPage({
         isPublished={event.is_published === true}
         initial={initial}
       />
+
+      {role === 'admin' && (
+        <ScheduleActions id={event.id} isPublished={event.is_published === true} />
+      )}
     </div>
   )
 }

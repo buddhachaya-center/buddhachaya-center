@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import type { ScheduleFormState } from './form-state'
+import type { ScheduleFormState, ScheduleActionState } from './form-state'
 import { revalidatePublicEvents } from './revalidate'
 import { berlinToUtc, weekdayOfDate } from './berlin-time'
 
@@ -199,4 +199,148 @@ export async function saveEvent(prev: ScheduleFormState, formData: FormData): Pr
   }
 
   redirect('/admin/schedule?saved=1')
+}
+
+async function requireAdmin(): Promise<{ supabase: Awaited<ReturnType<typeof createClient>>, error: string | null }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { supabase, error: 'You are not signed in.' }
+  }
+
+  const { data: staffUser } = await supabase
+    .from('staff_users')
+    .select('role')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (!staffUser || staffUser.role !== 'admin') {
+    return { supabase, error: 'Only an admin can do this.' }
+  }
+
+  return { supabase, error: null }
+}
+
+function getId(formData: FormData): { id: string | null, error: string | null } {
+  const id = (formData.get('id') as string || '').trim()
+  if (!id || !UUID_RE.test(id)) {
+    return { id: null, error: 'Invalid event ID.' }
+  }
+  return { id, error: null }
+}
+
+export async function publishEvent(prev: ScheduleActionState, formData: FormData): Promise<ScheduleActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: event, error: loadError } = await supabase
+    .from('events')
+    .select('id, is_published')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (loadError || !event) {
+    return { error: 'Event not found.' }
+  }
+
+  if (event.is_published === true) {
+    return { error: 'This event is already published.' }
+  }
+
+  const { data: updated, error: updateError } = await supabase
+    .from('events')
+    .update({ is_published: true })
+    .eq('id', id)
+    .select('id')
+
+  if (updateError) {
+    return { error: 'Could not publish the event. Please try again.' }
+  }
+
+  if (!updated || updated.length === 0) {
+    return { error: 'Not published: the event was not found or you do not have permission.' }
+  }
+
+  revalidatePublicEvents()
+  redirect('/admin/schedule?done=published')
+}
+
+export async function unpublishEvent(prev: ScheduleActionState, formData: FormData): Promise<ScheduleActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: event, error: loadError } = await supabase
+    .from('events')
+    .select('id, is_published')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (loadError || !event) {
+    return { error: 'Event not found.' }
+  }
+
+  if (event.is_published !== true) {
+    return { error: 'This event is not published.' }
+  }
+
+  const { data: updated, error: updateError } = await supabase
+    .from('events')
+    .update({ is_published: false })
+    .eq('id', id)
+    .select('id')
+
+  if (updateError) {
+    return { error: 'Could not unpublish the event. Please try again.' }
+  }
+
+  if (!updated || updated.length === 0) {
+    return { error: 'Not unpublished: the event was not found or you do not have permission.' }
+  }
+
+  revalidatePublicEvents()
+  redirect('/admin/schedule?done=unpublished')
+}
+
+export async function deleteEvent(prev: ScheduleActionState, formData: FormData): Promise<ScheduleActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: deleted, error: deleteError } = await supabase
+    .from('events')
+    .delete()
+    .eq('id', id)
+    .select('id')
+
+  if (deleteError) {
+    return { error: 'Could not delete the event. Please try again.' }
+  }
+
+  if (!deleted || deleted.length === 0) {
+    return { error: 'Not deleted: the event was not found or you do not have permission.' }
+  }
+
+  revalidatePublicEvents()
+  redirect('/admin/schedule?done=deleted')
 }
