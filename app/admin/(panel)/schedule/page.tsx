@@ -30,7 +30,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat('en-GB', {
 export default async function SchedulePage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>
+  searchParams: Promise<{ status?: string; saved?: string }>
 }) {
   const params = await searchParams
   const supabase = await createClient()
@@ -89,10 +89,23 @@ export default async function SchedulePage({
     <div>
       <h1 className="text-2xl font-bold text-[#1E3F20] mb-4">Schedule</h1>
 
+      {params.saved === '1' && (
+        <p className="text-green-700 text-sm mb-4">Saved.</p>
+      )}
+
       <div className="flex gap-4 mb-6 text-sm text-[#1E3F20]">
         <a href="/admin/schedule" className={!params.status ? activeClass : ''}>All</a>
         <a href="/admin/schedule?status=draft" className={params.status === 'draft' ? activeClass : ''}>Draft</a>
         <a href="/admin/schedule?status=published" className={params.status === 'published' ? activeClass : ''}>Published</a>
+      </div>
+
+      <div className="mb-6">
+        <a
+          href="/admin/schedule/new"
+          className="bg-[#1E3F20] text-white py-2 px-4 rounded hover:bg-[#163318] focus:outline-none focus:ring-2 focus:ring-[#1E3F20] focus:ring-offset-2 text-base inline-block"
+        >
+          Add New
+        </a>
       </div>
 
       <div className="overflow-x-auto">
@@ -110,7 +123,11 @@ export default async function SchedulePage({
             {events && events.length > 0 ? (
               events.map((event) => (
                 <tr key={event.id} className="border-b border-gray-200">
-                  <td className="p-3 text-[#1E3F20]">{getTitle(event)}</td>
+                  <td className="p-3 text-[#1E3F20]">
+                    <a href={`/admin/schedule/${event.id}`} className="hover:underline">
+                      {getTitle(event)}
+                    </a>
+                  </td>
                   <td className="p-3 text-[#1E3F20]">{getCategoryLabel(event)}</td>
                   <td className="p-3 text-[#1E3F20]">
                     {getWhenText(event)}
