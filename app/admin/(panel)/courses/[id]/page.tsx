@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import CourseForm from '../CourseForm'
+import CourseActions from '../CourseActions'
 
 const TEXT_FIELDS = [
   'title_my', 'title_en', 'title_de',
@@ -86,6 +87,10 @@ export default async function EditCoursePage({
         isPublished={course.is_published === true}
         initial={initial}
       />
+
+      {role === 'admin' && (
+        <CourseActions id={course.id} isPublished={course.is_published === true} />
+      )}
     </div>
   )
 }

@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import type { CourseFormState } from './form-state'
+import type { CourseFormState, CourseActionState } from './form-state'
 import { revalidatePublicCourses } from './revalidate'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
@@ -119,4 +119,148 @@ export async function saveCourse(prev: CourseFormState, formData: FormData): Pro
   }
 
   redirect('/admin/courses?saved=1')
+}
+
+async function requireAdmin(): Promise<{ supabase: Awaited<ReturnType<typeof createClient>>, error: string | null }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { supabase, error: 'You are not signed in.' }
+  }
+
+  const { data: staffUser } = await supabase
+    .from('staff_users')
+    .select('role')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (!staffUser || staffUser.role !== 'admin') {
+    return { supabase, error: 'Only an admin can do this.' }
+  }
+
+  return { supabase, error: null }
+}
+
+function getId(formData: FormData): { id: string | null, error: string | null } {
+  const id = (formData.get('id') as string || '').trim()
+  if (!id || !UUID_RE.test(id)) {
+    return { id: null, error: 'Invalid course ID.' }
+  }
+  return { id, error: null }
+}
+
+export async function publishCourse(prev: CourseActionState, formData: FormData): Promise<CourseActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: course, error: loadError } = await supabase
+    .from('courses')
+    .select('id, is_published')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (loadError || !course) {
+    return { error: 'Course not found.' }
+  }
+
+  if (course.is_published === true) {
+    return { error: 'This course is already published.' }
+  }
+
+  const { data: updated, error: updateError } = await supabase
+    .from('courses')
+    .update({ is_published: true })
+    .eq('id', id)
+    .select('id')
+
+  if (updateError) {
+    return { error: 'Could not publish the course. Please try again.' }
+  }
+
+  if (!updated || updated.length === 0) {
+    return { error: 'Not published: the course was not found or you do not have permission.' }
+  }
+
+  revalidatePublicCourses()
+  redirect('/admin/courses?done=published')
+}
+
+export async function unpublishCourse(prev: CourseActionState, formData: FormData): Promise<CourseActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: course, error: loadError } = await supabase
+    .from('courses')
+    .select('id, is_published')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (loadError || !course) {
+    return { error: 'Course not found.' }
+  }
+
+  if (course.is_published !== true) {
+    return { error: 'This course is not published.' }
+  }
+
+  const { data: updated, error: updateError } = await supabase
+    .from('courses')
+    .update({ is_published: false })
+    .eq('id', id)
+    .select('id')
+
+  if (updateError) {
+    return { error: 'Could not unpublish the course. Please try again.' }
+  }
+
+  if (!updated || updated.length === 0) {
+    return { error: 'Not unpublished: the course was not found or you do not have permission.' }
+  }
+
+  revalidatePublicCourses()
+  redirect('/admin/courses?done=unpublished')
+}
+
+export async function deleteCourse(prev: CourseActionState, formData: FormData): Promise<CourseActionState> {
+  const { supabase, error: authError } = await requireAdmin()
+  if (authError) {
+    return { error: authError }
+  }
+
+  const { id, error: idError } = getId(formData)
+  if (idError) {
+    return { error: idError }
+  }
+
+  const { data: deleted, error: deleteError } = await supabase
+    .from('courses')
+    .delete()
+    .eq('id', id)
+    .select('id')
+
+  if (deleteError) {
+    return { error: 'Could not delete the course. Please try again.' }
+  }
+
+  if (!deleted || deleted.length === 0) {
+    return { error: 'Not deleted: the course was not found or you do not have permission.' }
+  }
+
+  revalidatePublicCourses()
+  redirect('/admin/courses?done=deleted')
 }
