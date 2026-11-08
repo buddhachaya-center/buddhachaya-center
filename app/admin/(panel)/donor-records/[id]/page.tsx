@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import DonorRecordForm from '../DonorRecordForm'
+import DonorRecordActions from '../DonorRecordActions'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,6 +67,8 @@ export default async function EditDonorRecordPage({
         certificateNo={Number(record.certificate_no)}
         initial={initial}
       />
+
+      <DonorRecordActions id={record.id} />
     </div>
   )
 }

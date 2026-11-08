@@ -16,7 +16,7 @@ type DonorRecordRow = {
 export default async function DonorRecordsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ saved?: string }>
+  searchParams: Promise<{ saved?: string; done?: string }>
 }) {
   const params = await searchParams
   const supabase = await createClient()
@@ -52,6 +52,10 @@ export default async function DonorRecordsPage({
 
       {params.saved === '1' && (
         <p className="text-green-700 text-sm mb-4">Saved.</p>
+      )}
+
+      {params.done === 'deleted' && (
+        <p className="text-green-700 text-sm mb-4">Deleted.</p>
       )}
 
       <div className="mb-6">
