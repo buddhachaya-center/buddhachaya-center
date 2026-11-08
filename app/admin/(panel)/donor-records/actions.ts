@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import type { DonorRecordFormState } from './form-state'
+import type { DonorRecordActionState, DonorRecordFormState } from './form-state'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -135,4 +135,45 @@ export async function saveDonorRecord(prev: DonorRecordFormState, formData: Form
   }
 
   redirect('/admin/donor-records?saved=1')
+}
+
+export async function deleteDonorRecord(prev: DonorRecordActionState, formData: FormData): Promise<DonorRecordActionState> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return { error: 'You are not signed in.' }
+  }
+
+  const { data: staffUser } = await supabase
+    .from('staff_users')
+    .select('role')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (!staffUser || staffUser.role !== 'admin') {
+    return { error: 'Only an admin can do this.' }
+  }
+
+  const id = field(formData, 'id')
+
+  if (!UUID_RE.test(id)) {
+    return { error: 'Invalid donor record ID.' }
+  }
+
+  const { data: deleted, error: deleteError } = await supabase
+    .from('donor_records')
+    .delete()
+    .eq('id', id)
+    .select('id')
+
+  if (deleteError) {
+    return { error: 'Could not delete the donor record. Please try again.' }
+  }
+
+  if (!deleted || deleted.length === 0) {
+    return { error: 'Not deleted: the record was not found or you do not have permission.' }
+  }
+
+  redirect('/admin/donor-records?done=deleted')
 }
