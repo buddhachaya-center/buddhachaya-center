@@ -16,13 +16,14 @@ const MAX_PREVIEW_SCALE = 0.7
 const PRINT_SCALE = 0.64
 const WATERMARK_OPACITY = 0.1
 const TEXT_COLOR = '#1E3A5F'
+const LATIN_NAME_FONT_SIZE = 46
 
 const LAYOUT = {
   title1: { top: 20, bottom: 24, fontSize: 44, lineHeight: 1.15 },
   title2: { top: 24, bottom: 27.4, fontSize: 40, lineHeight: 1.15 },
   title3: { top: 29.4, bottom: 33, fontSize: 52, lineHeight: 1.05, fontWeight: 700 },
   dataLine: { top: 34, bottom: 38, fontSize: 34, lineHeight: 1.2 },
-  donorName: { top: 39.5, bottom: 47.5, fontSize: 54, lineHeight: 1.12, fontWeight: 700 },
+  donorName: { top: 38.5, bottom: 48.5, fontSize: 54, lineHeight: 1.8, fontWeight: 700 },
   remark: { top: 47.5, bottom: 51, fontSize: 28, lineHeight: 1.2 },
   body: { top: 51, bottom: 62, fontSize: 25, lineHeight: 1.9 },
   blessings: { top: 63.4, bottom: 70.4, fontSize: 27, lineHeight: 1.35 },
@@ -188,6 +189,7 @@ function isAbortError(value: unknown): boolean {
 
 export default function CertificatePrototype() {
   const [presetIndex, setPresetIndex] = useState(0)
+  const [name, setName] = useState(PRESETS[0]?.name ?? '')
   const [fontId, setFontId] = useState<FontId>('serif')
   const [previewScale, setPreviewScale] = useState(0.35)
   const [fontsReady, setFontsReady] = useState(false)
@@ -201,6 +203,8 @@ export default function CertificatePrototype() {
   const preset = PRESETS[presetIndex] ?? PRESETS[0]
   const font = FONT_OPTIONS.find((option) => option.id === fontId) ?? FONT_OPTIONS[0]
   const sharesText = preset.shares.trim()
+  const donorName = name.trim()
+  const hasBurmese = /[\u1000-\u109F]/.test(donorName)
   const dataLine = sharesText
     ? `ကုသိုလ်ဝေစု ( ${toBurmeseDigits(sharesText)} ) စု၊ ${preset.currency} ${formatAmount(preset.amount)} အလှူရှင်`
     : `${preset.currency} ${formatAmount(preset.amount)} အလှူရှင်`
@@ -332,7 +336,11 @@ export default function CertificatePrototype() {
           Preset
           <select
             value={presetIndex}
-            onChange={(event) => setPresetIndex(Number(event.target.value))}
+            onChange={(event) => {
+              const index = Number(event.target.value)
+              setPresetIndex(index)
+              setName(PRESETS[index]?.name ?? '')
+            }}
             className="border px-3 py-2"
           >
             {PRESETS.map((item, index) => (
@@ -356,6 +364,17 @@ export default function CertificatePrototype() {
               </option>
             ))}
           </select>
+        </label>
+
+        <label className="flex flex-col gap-1">
+          Donor name (Enter = new line, max 2 lines)
+          <textarea
+            value={name}
+            rows={2}
+            maxLength={120}
+            onChange={(event) => setName(event.target.value.split('\n').slice(0, 2).join('\n'))}
+            className="border px-3 py-2 w-80"
+          />
         </label>
 
         <div className="flex flex-wrap gap-2">
@@ -457,7 +476,13 @@ export default function CertificatePrototype() {
               <CertificateBlock block={LAYOUT.title2}>ဝိဟာရဒါန ကျောင်းအလှူ</CertificateBlock>
               <CertificateBlock block={LAYOUT.title3}>သာဓုအနုမောဒနာ ဂုဏ်ပြုလွှာ</CertificateBlock>
               <CertificateBlock block={LAYOUT.dataLine}>{dataLine}</CertificateBlock>
-              <CertificateBlock block={LAYOUT.donorName}>{preset.name}</CertificateBlock>
+              <CertificateBlock
+                block={{ ...LAYOUT.donorName, fontSize: hasBurmese ? LAYOUT.donorName.fontSize : LATIN_NAME_FONT_SIZE }}
+                left="10%"
+                right="10%"
+              >
+                {donorName}
+              </CertificateBlock>
               {preset.remark.trim() && <CertificateBlock block={LAYOUT.remark}>{preset.remark}</CertificateBlock>}
               <CertificateBlock block={LAYOUT.body}>
                 ဂျာမနီနိုင်ငံရောက် မြန်မာပြည်ဖွား ဗုဒ္ဓဘာသာဝင်များနှင့် တရားဘာသာ အားထုတ်လိုသူ နိုင်ငံခြားသားများအတွက် ကုသိုလ်ကောင်းမှုများ ဆည်းပူးအားထုတ်ရာ မြန်မာဗုဒ္ဓဘာသာဘုန်းကြီးကျောင်း ဖြစ်မြောက်ရေးအတွက် စေတနာသုံးတန် ပြဋ္ဌာန်းပြီး လှူဒါန်းကြသည့်အတွက် ဝမ်းမြောက်ဝမ်းသာဖြင့် ဤမှတ်တမ်းဂုဏ်ပြုလွှာကို ပေးအပ်ပါသည်။
