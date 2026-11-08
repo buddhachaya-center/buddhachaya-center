@@ -13,7 +13,12 @@ type DonorRecordRow = {
   updated_at: string
 }
 
-export default async function DonorRecordsPage() {
+export default async function DonorRecordsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ saved?: string }>
+}) {
+  const params = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -45,6 +50,19 @@ export default async function DonorRecordsPage() {
     <div>
       <h1 className="text-2xl font-bold text-[#1E3F20] mb-4">Donor Records</h1>
 
+      {params.saved === '1' && (
+        <p className="text-green-700 text-sm mb-4">Saved.</p>
+      )}
+
+      <div className="mb-6">
+        <a
+          href="/admin/donor-records/new"
+          className="bg-[#1E3F20] text-white py-2 px-4 rounded hover:bg-[#163318] focus:outline-none focus:ring-2 focus:ring-[#1E3F20] focus:ring-offset-2 text-base inline-block"
+        >
+          Add New
+        </a>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="w-full bg-white border border-gray-200 text-sm">
           <thead>
@@ -63,7 +81,9 @@ export default async function DonorRecordsPage() {
               records.map((record: DonorRecordRow) => (
                 <tr key={record.id} className="border-b border-gray-200">
                   <td className="p-3 text-[#1E3F20]">
-                    {record.certificate_no != null ? String(record.certificate_no).padStart(4, '0') : '-'}
+                    <a href={`/admin/donor-records/${record.id}`} className="hover:underline">
+                      {record.certificate_no != null ? String(record.certificate_no).padStart(4, '0') : '-'}
+                    </a>
                   </td>
                   <td className="p-3 text-[#1E3F20]">{record.donated_on}</td>
                   <td className="p-3 text-[#1E3F20]">
