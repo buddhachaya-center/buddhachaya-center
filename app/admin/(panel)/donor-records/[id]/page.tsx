@@ -65,6 +65,7 @@ export default async function EditDonorRecordPage({
         mode="edit"
         id={record.id}
         certificateNo={Number(record.certificate_no)}
+        certificateHref={`/admin/donor-records/${record.id}/certificate`}
         initial={initial}
       />
 

@@ -7,6 +7,7 @@ type DonorRecordFormProps = {
   mode: 'new' | 'edit'
   id?: string
   certificateNo?: number
+  certificateHref?: string
   initial: Record<string, string>
 }
 
@@ -18,7 +19,7 @@ function todayValue(): string {
   return `${year}-${month}-${day}`
 }
 
-export default function DonorRecordForm({ mode, id, certificateNo, initial }: DonorRecordFormProps) {
+export default function DonorRecordForm({ mode, id, certificateNo, certificateHref, initial }: DonorRecordFormProps) {
   const [state, formAction, isPending] = useActionState(saveDonorRecord, { error: null, values: null })
 
   const value = (name: string) => state.values?.[name] ?? initial[name] ?? ''
@@ -157,7 +158,18 @@ export default function DonorRecordForm({ mode, id, certificateNo, initial }: Do
         >
           Cancel
         </a>
+        {mode === 'edit' && certificateHref && (
+          <a
+            href={certificateHref}
+            className="border border-[#1E3F20] text-[#1E3F20] py-2 px-4 rounded hover:bg-[#1E3F20]/10 focus:outline-none focus:ring-2 focus:ring-[#1E3F20] focus:ring-offset-2 text-base"
+          >
+            Download Certificate
+          </a>
+        )}
       </div>
+      {mode === 'edit' && (
+        <p className="text-xs text-gray-600">Save your changes first. The certificate shows the saved record.</p>
+      )}
     </form>
   )
 }
